@@ -17,19 +17,21 @@ function Logo({ size = "md", onNav }) {
 // Rolling topbar
 // ─────────────────────────────────────────────
 function TopBar() {
+  const shipping = useShippingSettings();
+  const lines = window.topBarLines(shipping.free);
   const [idx, setIdx] = React.useState(0);
   const [paused, setPaused] = React.useState(false);
   React.useEffect(() => {
     if (paused) return;
-    const id = setInterval(() => setIdx((i) => (i + 1) % window.TOP_BAR_LINES.length), 4500);
+    const id = setInterval(() => setIdx((i) => (i + 1) % lines.length), 4500);
     return () => clearInterval(id);
-  }, [paused]);
+  }, [paused, lines.length]);
   return (
     <div className="topbar" role="region" aria-label="Site announcements"
          onMouseEnter={() => setPaused(true)}
          onMouseLeave={() => setPaused(false)}>
-      <div key={idx} className="fade-in" style={{ animation: "fadeIn .5s ease both" }}>
-        {window.TOP_BAR_LINES[idx]}
+      <div key={idx + "-" + shipping.free} className="fade-in" style={{ animation: "fadeIn .5s ease both" }}>
+        {lines[idx]}
       </div>
     </div>
   );

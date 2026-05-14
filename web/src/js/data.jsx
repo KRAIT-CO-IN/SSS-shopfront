@@ -11,10 +11,21 @@ const COLLECTION = [
   { id: "ghee",       label: "Ghee Mysorepak",   color: "#D9A05B" },
 ];
 const PRODUCTS = [];
-const TOP_BAR_LINES = [
-  "Free Shipping On Artisanal Orders Over ₹999",
+// Static portion — first line computed at runtime from live shipping settings.
+const TOP_BAR_LINES_STATIC = [
   "Hand-packed in small batches • Made in India",
   "100% Natural • Zero Preservatives • Stone-ground",
+];
+function topBarLines(free) {
+  return [
+    `Free Shipping On Artisanal Orders Over ₹${free ?? SHIPPING.free}`,
+    ...TOP_BAR_LINES_STATIC,
+  ];
+}
+// Legacy fallback — actual values pulled at render time from topBarLines(free).
+const TOP_BAR_LINES = [
+  "Free Shipping On Artisanal Orders Over ₹499",
+  ...TOP_BAR_LINES_STATIC,
 ];
 
 const CAT_COLORS = {
@@ -194,7 +205,7 @@ function Icon({ name, size = 18, stroke = 1.7, ...props }) {
 const fmt = (n) => `₹${(n || 0).toLocaleString("en-IN")}`;
 
 Object.assign(window, {
-  CATEGORIES, COLLECTION, PRODUCTS, TOP_BAR_LINES, SHIPPING,
+  CATEGORIES, COLLECTION, PRODUCTS, TOP_BAR_LINES, SHIPPING, topBarLines,
   useCart, useToasts, useCatalog, hydrateCatalog,
   useShippingSettings, hydrateShipping,
   Icon, fmt,

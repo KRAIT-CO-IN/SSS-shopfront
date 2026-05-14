@@ -817,9 +817,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
 }
-.adm-daterange .ainput { min-width: 160px; }
-.adm-daterange .arrow { color: var(--ac-muted); }
+.adm-daterange .ainput { flex: 0 0 200px; max-width: 220px; min-width: 0; }
+.adm-daterange .arrow { color: var(--ac-muted); flex-shrink: 0; }
+.adm-daterange .abtn { flex-shrink: 0; }
 
 .aquick {
   display: inline-flex;

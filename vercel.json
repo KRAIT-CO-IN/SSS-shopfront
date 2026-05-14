@@ -2,6 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
   "outputDirectory": "public",
+  "regions": ["bom1"],
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/index" },
     { "source": "/((?!api/|assets/|js/|styles/|favicon|.*\\..*).*)", "destination": "/index.html" }
