@@ -285,18 +285,42 @@ function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
 // Product Detail Page
 // ─────────────────────────────────────────────
 function ProductPage({ productId, onNav, onAddToCart }) {
-  const product = PRODUCTS.find((p) => p.id === productId) || PRODUCTS[1]; // fallback to Nalla Karam
-  const [weight, setWeight] = React.useState(product.weights[0].w);
+  const catalog = useCatalog();             // hydrate on direct deep-link
+  const product = PRODUCTS.find((p) => p.id === productId) || PRODUCTS[0];
+  const [weight, setWeight] = React.useState(product?.weights?.[0]?.w || "");
   const [qty, setQty] = React.useState(1);
   const [tab, setTab] = React.useState("description");
   const [activeImg, setActiveImg] = React.useState(0);
 
   React.useEffect(() => {
+    if (!product) return;
     setWeight(product.weights[0].w);
     setQty(1);
     setActiveImg(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [productId]);
+  }, [productId, product]);
+
+  // Loading skeleton while catalog hydrates from API
+  if (!product) {
+    return (
+      <main className="container" data-screen-label="03 Product (loading)" style={{ paddingTop: 48 }}>
+        <div className="pdp-layout" aria-busy="true">
+          <div className="pdp-media">
+            <div className="pdp-main-img skeleton-shimmer" />
+            <div className="pdp-thumbs">
+              {[0,1,2].map(i => <div key={i} className="pdp-thumb skeleton-shimmer" />)}
+            </div>
+          </div>
+          <div className="pdp-body">
+            <div className="skeleton-line skeleton-shimmer" style={{ width: "70%", height: 36 }} />
+            <div className="skeleton-line skeleton-shimmer" style={{ width: "50%" }} />
+            <div className="skeleton-line skeleton-shimmer" style={{ width: "85%" }} />
+            <div className="skeleton-line skeleton-shimmer" style={{ width: "60%" }} />
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   const sel = product.weights.find((w) => w.w === weight) || product.weights[0];
   const savings = sel.mrp - sel.price;
