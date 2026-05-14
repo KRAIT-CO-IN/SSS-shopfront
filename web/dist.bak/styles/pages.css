@@ -94,31 +94,8 @@
   cursor: pointer;
   transition: transform .2s ease;
 }
-.collection-item {
-  animation: collection-bob 4.8s ease-in-out infinite;
-}
-.collection-item:nth-child(2) { animation-delay: .35s; }
-.collection-item:nth-child(3) { animation-delay: .70s; }
-.collection-item:nth-child(4) { animation-delay: 1.05s; }
-.collection-item:nth-child(5) { animation-delay: 1.40s; }
-.collection-item:nth-child(6) { animation-delay: 1.75s; }
-.collection-item:hover { transform: translateY(-10px) scale(1.06); animation-play-state: paused; }
-.collection-item:hover .collection-disc {
-  border-color: var(--c-primary);
-  box-shadow: 0 14px 28px rgba(196,18,31,0.18);
-}
-.collection-item:hover .collection-disc svg { transform: scale(1.08); }
+.collection-item:hover { transform: translateY(-4px); }
 .collection-item:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 4px; border-radius: var(--r-sm); }
-.collection-disc svg { transition: transform .3s cubic-bezier(.2,.7,.2,1); }
-
-@keyframes collection-bob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .collection-item { animation: none; }
-  .collection-item:hover { transform: none; }
-}
 .collection-disc {
   width: 96px;
   height: 96px;

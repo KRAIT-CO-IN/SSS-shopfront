@@ -31,7 +31,7 @@ async function buildApp() {
   });
 
   app.get("/health", async () => ({ ok: true, ts: Date.now() }));
-  await app.register(authRoutes,     { prefix: "/api/auth" });
+  await app.register(authRoutes,     { prefix: "/api/account" });
   await app.register(productRoutes,  { prefix: "/api/products" });
   await app.register(categoryRoutes, { prefix: "/api/categories" });
   await app.register(orderRoutes,    { prefix: "/api/orders" });
