@@ -5,7 +5,7 @@
 // Home page
 // ─────────────────────────────────────────────
 function HomePage({ onNav }) {
-  const [activeCollection, setActiveCollection] = React.useState("cashew");
+  useCatalog();          // ensures PRODUCTS hydrate when landing on home
   return (
     <main data-screen-label="01 Home">
       {/* Hero */}
@@ -37,22 +37,33 @@ function HomePage({ onNav }) {
         </div>
       </section>
 
-      {/* Collection */}
+      {/* Collection — real product tiles */}
       <section className="section">
         <div className="container">
           <div className="section-title"><h2 className="h-1">Explore Our Collection</h2></div>
-          <div className="collection-row">
-            {COLLECTION.map((c) => (
-              <button key={c.id}
-                      className={`collection-item${activeCollection === c.id ? " is-active" : ""}`}
-                      onClick={() => { setActiveCollection(c.id); onNav("shop"); }}>
-                <span className="collection-disc">
-                  <CollectionGlyph color={c.color} id={c.id} />
+          <div className="collection-grid">
+            {PRODUCTS.slice(0, 6).map((p) => (
+              <button key={p.id} className="collection-tile"
+                      onClick={() => onNav("product", p.id)}
+                      aria-label={`${p.name} — view product`}>
+                <span className="collection-tile-media">
+                  <img src={p.img} alt={p.name} loading="lazy" />
                 </span>
-                <span className="label">{c.label}</span>
+                <span className="collection-tile-label">{p.name}</span>
+                <span className="collection-tile-price">{fmt(Math.min(...p.weights.map((w) => w.price)))}</span>
               </button>
             ))}
           </div>
+          {PRODUCTS.length === 0 && (
+            <div className="collection-grid" aria-busy="true" aria-label="Loading featured products">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div className="collection-tile" key={`sk-${i}`}>
+                  <span className="collection-tile-media skeleton-shimmer" />
+                  <span className="skeleton-line skeleton-shimmer" style={{ width: "70%" }} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -460,39 +471,4 @@ function ProductPage({ productId, onNav, onAddToCart }) {
   );
 }
 
-// ─────────────────────────────────────────────
-// Categories landing
-// ─────────────────────────────────────────────
-function CategoriesPage({ onNav }) {
-  React.useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, []);
-  const cats = CATEGORIES.filter((c) => c.id !== "all");
-  const countByCat = (id) => PRODUCTS.filter((p) => p.category === id).length;
-  return (
-    <React.Fragment>
-      <div className="page-hero">
-        <div>
-          <h1 style={{ fontFamily: "var(--font-mono)", fontSize: 16, letterSpacing: 4, color: "#fff", margin: 0 }}>
-            CATEGORIES
-          </h1>
-        </div>
-      </div>
-
-      <section className="container" style={{ padding: "56px 0 80px" }}>
-        <div className="cat-grid">
-          {cats.map((c) => (
-            <button key={c.id} className="cat-tile" onClick={() => onNav("shop", c.id)}
-                    style={{ "--cat-accent": c.accent }}>
-              <div className="cat-tile-disc">
-                <CollectionGlyph color={c.accent} id={c.id} />
-              </div>
-              <h3>{c.label}</h3>
-              <span>{countByCat(c.id)} {countByCat(c.id) === 1 ? "product" : "products"}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-    </React.Fragment>
-  );
-}
-
-Object.assign(window, { HomePage, ShopPage, ProductPage, CategoriesPage });
+Object.assign(window, { HomePage, ShopPage, ProductPage });

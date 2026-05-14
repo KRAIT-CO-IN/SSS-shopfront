@@ -6,7 +6,6 @@ function parseRoute() {
   const parts = h.split("/").filter(Boolean);
   if (parts.length === 0) return { name: "home" };
   if (parts[0] === "shop") return { name: "shop", category: parts[1] || null };
-  if (parts[0] === "categories") return { name: "categories" };
   if (parts[0] === "product") return { name: "product", id: parts[1] || (PRODUCTS[0]?.id) };
   if (parts[0] === "checkout") return { name: "checkout" };
   if (parts[0] === "confirm") return { name: "confirm" };
@@ -99,7 +98,6 @@ function App() {
       <div key={route.name + (route.id || "") + (catalog.ready ? "r" : "0")} className="fade-in">
         {route.name === "home"     && <HomePage onNav={nav} />}
         {route.name === "shop"     && <ShopPage onNav={nav} onAddToCart={addToCart} cart={cart} initialCategory={route.category} />}
-        {route.name === "categories" && <CategoriesPage onNav={nav} />}
         {route.name === "product"  && <ProductPage productId={route.id} onNav={nav} onAddToCart={addToCart} />}
         {route.name === "checkout" && <CheckoutPage cart={cart} onNav={nav} onProceed={proceedToPayment} />}
         {route.name === "confirm"  && <ConfirmPage order={lastOrder} onNav={nav} />}

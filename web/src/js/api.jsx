@@ -29,10 +29,10 @@ async function req(path, opts = {}) {
 
 const API = {
   auth: {
-    login: (email, password) => req("/account/login", { method: "POST", body: { email, password } }),
-    me: () => req("/account/me"),
-    updateProfile: (data) => req("/account/profile", { method: "PUT", body: data }),
-    changePassword: (current, next) => req("/account/password", { method: "PUT", body: { current, next } }),
+    login: (email, password) => req("/adm/login", { method: "POST", body: { email, password } }),
+    me: () => req("/adm/me"),
+    updateProfile: (data) => req("/adm/profile", { method: "PUT", body: data }),
+    changePassword: (current, next) => req("/adm/password", { method: "PUT", body: { current, next } }),
     getToken, setToken,
     isAuthed: () => !!getToken(),
     logout: () => setToken(null),

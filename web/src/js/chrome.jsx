@@ -52,9 +52,8 @@ function Header({ route, onNav, cartCount, onOpenCart }) {
   React.useEffect(() => { setMobileOpen(false); }, [route]);
 
   const navItems = [
-    { id: "story",      label: "Our Story",  route: "home", anchor: "story" },
-    { id: "categories", label: "Categories", route: "categories" },
-    { id: "shop",       label: "Shop",       route: "shop" },
+    { id: "story", label: "Our Story", route: "home", anchor: "story" },
+    { id: "shop",  label: "Shop",     route: "shop" },
   ];
 
   const handleNavClick = (e, n) => {
@@ -79,8 +78,7 @@ function Header({ route, onNav, cartCount, onOpenCart }) {
           <nav className="nav" aria-label="Primary">
             {navItems.map((n) => {
               const active = (n.id === "shop" && (route === "shop" || route === "product"))
-                          || (n.id === "story" && route === "home")
-                          || (n.id === "categories" && route === "categories");
+                          || (n.id === "story" && route === "home");
               return (
                 <a key={n.id} href={`#/${n.route}${n.anchor ? "#" + n.anchor : ""}`}
                    className={`nav-link${active ? " is-active" : ""}`}
