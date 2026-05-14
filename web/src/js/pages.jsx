@@ -116,6 +116,7 @@ function CollectionGlyph({ color, id }) {
 // Shop / Listing page
 // ─────────────────────────────────────────────
 function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
+  const catalog = useCatalog();
   const [activeCat, setActiveCat] = React.useState(initialCategory || "all");
   const [maxPrice, setMaxPrice] = React.useState(1000);
   const [page, setPage] = React.useState(1);
@@ -138,8 +139,9 @@ function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
 
   return (
     <main data-screen-label="02 Shop">
-      <section className="page-hero">
-        <h1>{headerLabel}</h1>
+      <h1 className="sr-only">{headerLabel} — Shop SSS Food World</h1>
+      <section className="page-hero" aria-hidden="true">
+        <span className="page-hero-label">{headerLabel}</span>
       </section>
 
       <div className="container shop-layout">
@@ -178,16 +180,29 @@ function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
             <div className="shop-count">Showing <b>{filtered.length}</b> products</div>
           </div>
 
-          {visible.length === 0 ? (
-            <div style={{ padding: "80px 0", textAlign: "center", color: "var(--c-muted)" }}>
-              <p style={{ fontSize: 16, marginBottom: 12 }}>No products match those filters.</p>
+          {!catalog.ready && PRODUCTS.length === 0 ? (
+            <div className="product-list" aria-busy="true" aria-label="Loading products">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div className="p-row skeleton-card" key={`sk-${i}`}>
+                  <div className="p-row-media skeleton-shimmer" />
+                  <div className="p-row-body">
+                    <div className="skeleton-line skeleton-shimmer" style={{ width: "60%" }} />
+                    <div className="skeleton-line skeleton-shimmer" style={{ width: "92%" }} />
+                    <div className="skeleton-line skeleton-shimmer" style={{ width: "40%" }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : visible.length === 0 ? (
+            <div className="empty-block" role="status">
+              <p>No products match those filters.</p>
               <button className="btn btn--ghost btn--sm" onClick={() => { setActiveCat("all"); setMaxPrice(1000); }}>
                 Reset filters
               </button>
             </div>
           ) : (
             <div className="product-list">
-              {visible.map((p) => {
+              {visible.map((p, idx) => {
                 const selectedW = weightByProduct[p.id] || p.weights[0].w;
                 const sel = p.weights.find((w) => w.w === selectedW) || p.weights[0];
                 return (
@@ -197,7 +212,7 @@ function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
                            tabIndex={0} role="link"
                            aria-label={`${p.name} — view details`}>
                     <div className="p-row-media">
-                      <img src={p.img} alt={p.name} loading="lazy" />
+                      <img src={p.img} alt={p.name} loading={idx < 3 ? "eager" : "lazy"} fetchpriority={idx < 1 ? "high" : "auto"} />
                     </div>
                     <div className="p-row-body">
                       <h3>{p.name}</h3>

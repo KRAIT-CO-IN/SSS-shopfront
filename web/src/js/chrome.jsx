@@ -18,12 +18,16 @@ function Logo({ size = "md", onNav }) {
 // ─────────────────────────────────────────────
 function TopBar() {
   const [idx, setIdx] = React.useState(0);
+  const [paused, setPaused] = React.useState(false);
   React.useEffect(() => {
+    if (paused) return;
     const id = setInterval(() => setIdx((i) => (i + 1) % window.TOP_BAR_LINES.length), 4500);
     return () => clearInterval(id);
-  }, []);
+  }, [paused]);
   return (
-    <div className="topbar" role="region" aria-label="Site announcements">
+    <div className="topbar" role="region" aria-label="Site announcements"
+         onMouseEnter={() => setPaused(true)}
+         onMouseLeave={() => setPaused(false)}>
       <div key={idx} className="fade-in" style={{ animation: "fadeIn .5s ease both" }}>
         {window.TOP_BAR_LINES[idx]}
       </div>
@@ -80,6 +84,7 @@ function Header({ route, onNav, cartCount, onOpenCart }) {
               return (
                 <a key={n.id} href={`#/${n.route}${n.anchor ? "#" + n.anchor : ""}`}
                    className={`nav-link${active ? " is-active" : ""}`}
+                   aria-current={active ? "page" : undefined}
                    onClick={(e) => handleNavClick(e, n)}>
                   {n.label}
                 </a>
@@ -280,12 +285,12 @@ function CartDrawer({ open, onClose, cart, onNav }) {
             </div>
             {remaining > 0 ? (
               <div className="ship-progress">
-                <span>📦 You're {fmt(remaining)} away from free shipping!</span>
+                <span><Icon name="truck" size={16} /> You're {fmt(remaining)} away from free shipping!</span>
                 <div className="bar"><div style={{ width: `${progress}%` }} /></div>
               </div>
             ) : (
               <div className="ship-progress">
-                <span>🎉 You've unlocked free shipping!</span>
+                <span><Icon name="check" size={16} /> You've unlocked free shipping!</span>
                 <div className="bar"><div style={{ width: "100%" }} /></div>
               </div>
             )}

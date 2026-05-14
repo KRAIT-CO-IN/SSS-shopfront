@@ -31,9 +31,22 @@
   --font-sans:  "Inter", "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:  "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* Radii / shadows */
-  --r-sm: 6px;
-  --r-md: 10px;
+  /* Semantic-ish aliases for color tokens — keep brand palette intact */
+  --color-success-strong: #1F6B40;  /* tag text — AA on success-soft */
+
+  /* Type scale (8/12-step) */
+  --fs-xs:   12px;
+  --fs-sm:   14px;
+  --fs-base: 16px;
+  --fs-md:   18px;
+  --fs-lg:   20px;
+  --fs-xl:   24px;
+  --fs-2xl:  32px;
+  --fs-3xl:  48px;
+
+  /* Radii — 3-tier */
+  --r-sm: 8px;
+  --r-md: 12px;
   --r-lg: 16px;
   --r-pill: 999px;
   --sh-card: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(44,26,14,0.06);
@@ -43,7 +56,10 @@
   --maxw: 1280px;
   --gutter: clamp(20px, 4vw, 64px);
   --header-h: 112px;
-  --topbar-h: 33px;
+  --topbar-h: 36px;
+
+  /* a11y: min touch target — per ui-ux-pro-max touch-target-size rule */
+  --touch-min: 44px;
 }
 
 * { box-sizing: border-box; }
@@ -54,7 +70,7 @@ html, body {
   background: var(--c-bg);
   color: var(--c-ink);
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--fs-base);     /* 16px — avoids iOS Safari auto-zoom on inputs */
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -71,7 +87,7 @@ img { display: block; max-width: 100%; }
 /* Type ramp */
 .h-eyebrow {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-xs);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--c-primary);
@@ -169,7 +185,7 @@ img { display: block; max-width: 100%; }
   letter-spacing: 0.4px;
   text-transform: uppercase;
 }
-.tag--success { background: var(--c-success-soft); color: var(--c-success); }
+.tag--success { background: var(--c-success-soft); color: var(--color-success-strong); }
 .tag--info    { background: #DBEAFE; color: #1D4ED8; }
 .tag--red     { background: var(--c-primary-soft); color: var(--c-primary-2); }
 .tag--new     { background: var(--c-primary); color: #fff; }
@@ -296,8 +312,8 @@ img { display: block; max-width: 100%; }
   align-items: center;
   justify-content: center;
   font-family: var(--font-sans);
-  font-size: 11px;
-  letter-spacing: 2px;
+  font-size: var(--fs-xs);              /* 12 */
+  letter-spacing: 1.6px;
   text-transform: uppercase;
 }
 
@@ -349,9 +365,9 @@ img { display: block; max-width: 100%; }
   gap: 12px;
 }
 .icon-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border-radius: var(--r-sm);
   background: transparent;
   border: 1px solid transparent;
   color: var(--c-ink-2);
@@ -361,6 +377,7 @@ img { display: block; max-width: 100%; }
   transition: background .15s ease, border-color .15s ease;
   position: relative;
 }
+.icon-btn:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
 .icon-btn:hover { background: rgba(44,26,14,0.06); }
 .cart-badge {
   position: absolute;
@@ -493,4 +510,26 @@ img { display: block; max-width: 100%; }
   margin: -1px; padding: 0;
   border: 0; overflow: hidden;
   clip: rect(0,0,0,0); white-space: nowrap;
+}
+
+/* Tabular figures for prices/timers — prevents jitter */
+.num-tabular,
+.price, .price-strike, .pdp-price, .cart-item-price,
+.sum-item .price, .sum-row, .subtotal-row b {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ──────────────────────────────────────────────
+   Reduced motion — ui-ux-pro-max reduced-motion rule
+   Cuts decorative animation; keeps essential state-change at minimum.
+   ────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .fade-in, .fade-up { animation: none !important; }
 }
