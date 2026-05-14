@@ -63,7 +63,10 @@ function CheckoutPage({ cart, onNav, onProceed }) {
     if (Object.keys(errs).length === 0) onProceed(form);
   };
 
-  const SHIPPING = 100;
+  const shipping = useShippingSettings();
+  const FREE_AT = +shipping.free || 499;
+  const RATE = +shipping.rate || 80;
+  const SHIPPING = cart.subtotal >= FREE_AT ? 0 : RATE;
   const TAX_RATE = 0.05;
   const tax = Math.round(cart.subtotal * TAX_RATE);
   const total = cart.subtotal + SHIPPING + tax;
@@ -297,7 +300,7 @@ function ConfirmPage({ order, onNav }) {
         <span className="label-xs">Up Next</span>
         <h2 className="h-2">Stock up the pantry</h2>
         <p className="body" style={{ maxWidth: 38 + "ch" }}>
-          Free shipping on all orders above {fmt(999)}. Save 10% on your next gift box when you bundle three or more.
+          Free shipping on all orders above {fmt(FREE_AT)}. Save 10% on your next gift box when you bundle three or more.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, margin: "16px 0" }}>
           {PRODUCTS.slice(0, 4).map((p) => (

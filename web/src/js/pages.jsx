@@ -37,29 +37,33 @@ function HomePage({ onNav }) {
         </div>
       </section>
 
-      {/* Collection — real product tiles */}
+      {/* Collection — round-robin across categories so every category gets a slot */}
       <section className="section">
         <div className="container">
           <div className="section-title"><h2 className="h-1">Explore Our Collection</h2></div>
-          <div className="collection-grid">
-            {PRODUCTS.slice(0, 6).map((p) => (
-              <button key={p.id} className="collection-tile"
-                      onClick={() => onNav("product", p.id)}
-                      aria-label={`${p.name} — view product`}>
-                <span className="collection-tile-media">
-                  <img src={p.img} alt={p.name} loading="lazy" />
-                </span>
-                <span className="collection-tile-label">{p.name}</span>
-                <span className="collection-tile-price">{fmt(Math.min(...p.weights.map((w) => w.price)))}</span>
-              </button>
-            ))}
-          </div>
-          {PRODUCTS.length === 0 && (
+          {PRODUCTS.length > 0 ? (
+            <div className="collection-grid">
+              {roundRobinByCategory(PRODUCTS, 10).map((p, idx) => (
+                <button key={p.id} className="collection-tile"
+                        onClick={() => onNav("product", p.id)}
+                        aria-label={`${p.name} — view product`}>
+                  <span className="collection-tile-media">
+                    <img src={p.img} alt={p.name}
+                         loading={idx < 5 ? "eager" : "lazy"}
+                         fetchpriority={idx < 2 ? "high" : "auto"} />
+                  </span>
+                  <span className="collection-tile-label">{p.name}</span>
+                  <span className="collection-tile-price">{fmt(Math.min(...p.weights.map((w) => w.price)))}</span>
+                </button>
+              ))}
+            </div>
+          ) : (
             <div className="collection-grid" aria-busy="true" aria-label="Loading featured products">
-              {Array.from({ length: 6 }).map((_, i) => (
+              {Array.from({ length: 10 }).map((_, i) => (
                 <div className="collection-tile" key={`sk-${i}`}>
                   <span className="collection-tile-media skeleton-shimmer" />
                   <span className="skeleton-line skeleton-shimmer" style={{ width: "70%" }} />
+                  <span className="skeleton-line skeleton-shimmer" style={{ width: "40%" }} />
                 </div>
               ))}
             </div>
@@ -96,6 +100,28 @@ function HomePage({ onNav }) {
       </section>
     </main>
   );
+}
+
+// Round-robin: walk every category in turn, pick one product per category per pass
+// until we have `n` products. Mirrors how the categories array is ordered.
+function roundRobinByCategory(products, n) {
+  const buckets = new Map();
+  for (const p of products) {
+    if (!buckets.has(p.category)) buckets.set(p.category, []);
+    buckets.get(p.category).push(p);
+  }
+  const queues = [...buckets.values()];
+  const out = [];
+  let pass = 0;
+  while (out.length < n) {
+    let picked = false;
+    for (const q of queues) {
+      if (q[pass]) { out.push(q[pass]); picked = true; if (out.length === n) break; }
+    }
+    if (!picked) break;
+    pass++;
+  }
+  return out;
 }
 
 // Simple SVG glyph per collection circle (so we don't need 6 product photos)

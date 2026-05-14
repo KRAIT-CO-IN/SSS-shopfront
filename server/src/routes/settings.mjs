@@ -21,6 +21,7 @@ export default async function settingsRoutes(app) {
   app.get("/:key", async (req, reply) => {
     const { key } = req.params;
     if (!KEYS.includes(key)) return reply.code(404).send({ error: "Unknown settings key" });
+    reply.header("cache-control", "public, s-maxage=30, stale-while-revalidate=300");
     const row = await app.prisma.settings.findUnique({ where: { key } });
     return { value: row?.value ?? defaults[key] };
   });

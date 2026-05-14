@@ -6,14 +6,10 @@ async function bust(redis, keys) {
 }
 
 export default async function productRoutes(app) {
-  // List (public — storefront uses this; cached)
-  app.get("/", async (req) => {
+  // List (public — storefront uses this; CDN-cached at the edge)
+  app.get("/", async (req, reply) => {
     const { category, status, q, take = 100, skip = 0 } = req.query || {};
-    const cacheKey = `products:${category || "all"}:${status || "all"}:${q || ""}:${take}:${skip}`;
-    if (app.redis) {
-      const hit = await app.redis.get(cacheKey).catch(() => null);
-      if (hit) return JSON.parse(hit);
-    }
+    reply.header("cache-control", "public, s-maxage=15, stale-while-revalidate=120");
     const where = {};
     if (status) where.status = status;
     if (q) where.OR = [
@@ -30,9 +26,7 @@ export default async function productRoutes(app) {
       }),
       app.prisma.product.count({ where }),
     ]);
-    const payload = { items, total };
-    if (app.redis) await app.redis.set(cacheKey, JSON.stringify(payload), "EX", 30).catch(() => {});
-    return payload;
+    return { items, total };
   });
 
   // Read one

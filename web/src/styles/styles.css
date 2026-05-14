@@ -439,6 +439,7 @@ img { display: block; max-width: 100%; }
   margin: 0 0 24px 0;
 }
 .footer-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.footer-col ul li { font-size: 15px; line-height: 1.4; }
 .footer-col a { color: var(--c-on-footer); font-size: 15px; transition: color .15s ease; }
 .footer-col a:hover { color: #fff; }
 .footer-brand p { color: var(--c-on-footer-mute); font-size: 13px; line-height: 1.7; max-width: 280px; margin: 18px 0 0; }

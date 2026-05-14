@@ -90,9 +90,6 @@ function Header({ route, onNav, cartCount, onOpenCart }) {
             })}
           </nav>
           <div className="header-tools">
-            <button className="icon-btn" aria-label="Search">
-              <Icon name="search" />
-            </button>
             <button className="icon-btn" aria-label={`Cart, ${cartCount} items`} onClick={onOpenCart}>
               <Icon name="cart" />
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
@@ -128,13 +125,16 @@ function Header({ route, onNav, cartCount, onOpenCart }) {
 // Footer
 // ─────────────────────────────────────────────
 function Footer({ onNav }) {
+  // Keep CATEGORIES live so adding from Admin Panel shows up here automatically.
+  useCatalog();
   const nav = [
     { l: "Shop",       route: "shop" },
     { l: "Our Story",  route: "home" },
-    { l: "Blog",       route: "home" },
     { l: "Contact Us", route: "home" },
   ];
-  const cats = ["Pickles", "Powders", "Pastes", "Chutneys", "Gift Packs"];
+  // Skip the synthetic "All" entry; cap at 5 published categories — keeps layout stable
+  // no matter how many categories admin creates.
+  const cats = window.CATEGORIES.filter((c) => c.id !== "all").slice(0, 5);
   const info = ["Delivery Info", "Returns Policy", "Privacy", "Terms"];
 
   return (
@@ -162,7 +162,18 @@ function Footer({ onNav }) {
           </div>
           <div className="footer-col">
             <h4>Categories</h4>
-            <ul>{cats.map((c) => <li key={c}><a href="#/shop" onClick={(e) => { e.preventDefault(); onNav("shop"); }}>{c}</a></li>)}</ul>
+            <ul>
+              {cats.map((c) => (
+                <li key={c.id}>
+                  <a href="#/shop" onClick={(e) => { e.preventDefault(); onNav("shop", c.id); }}>{c.label}</a>
+                </li>
+              ))}
+              {window.CATEGORIES.filter((c) => c.id !== "all").length > 5 && (
+                <li>
+                  <a href="#/shop" onClick={(e) => { e.preventDefault(); onNav("shop"); }} style={{ opacity: .85, fontWeight: 600 }}>View all →</a>
+                </li>
+              )}
+            </ul>
           </div>
           <div className="footer-col">
             <h4>Information</h4>
@@ -202,7 +213,8 @@ function Toasts({ toasts }) {
 // Cart drawer
 // ─────────────────────────────────────────────
 function CartDrawer({ open, onClose, cart, onNav }) {
-  const FREE_AT = 999;
+  const shipping = useShippingSettings();
+  const FREE_AT = +shipping.free || 499;
   const remaining = Math.max(0, FREE_AT - cart.subtotal);
   const progress = Math.min(100, (cart.subtotal / FREE_AT) * 100);
 

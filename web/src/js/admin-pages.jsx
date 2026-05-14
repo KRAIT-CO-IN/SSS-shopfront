@@ -682,7 +682,7 @@ function TransactionsPage({ txns, onView }) {
       </div>
 
       <p className="text-muted" style={{ margin: "18px 4px" }}>
-        Showing 247 transactions · 07 Apr 2025 to 07 May 2025
+        Showing {txns.length} {txns.length === 1 ? "transaction" : "transactions"}
       </p>
 
       <div className="atable-wrap">
@@ -720,15 +720,15 @@ function TransactionsPage({ txns, onView }) {
           </tbody>
         </table>
         <div className="atable-foot">
-          <span>Showing 1–{txns.length} of 247 transactions</span>
+          <span>Showing {txns.length === 0 ? 0 : 1}–{txns.length} of {txns.length} transactions</span>
           <div className="apager">
             <button disabled><AIcon name="chev-l" size={14}/></button>
             <button className="is-active">1</button>
-            <button>2</button>
-            <button>3</button>
-            <button disabled>…</button>
-            <button>13</button>
-            <button><AIcon name="chev-r" size={14}/></button>
+            <button disabled style={{ display: "none" }}>2</button>
+            <button disabled style={{ display: "none" }}>3</button>
+            <button disabled style={{ display: "none" }}>…</button>
+            <button disabled style={{ display: "none" }}>13</button>
+            <button disabled><AIcon name="chev-r" size={14}/></button>
           </div>
         </div>
       </div>

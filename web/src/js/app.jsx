@@ -16,6 +16,7 @@ function App() {
   const cart = useCart();
   const toasts = useToasts();
   const catalog = useCatalog();
+  const shipping = useShippingSettings();
   const [route, setRoute] = React.useState(parseRoute());
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [payOpen, setPayOpen] = React.useState(false);
@@ -88,7 +89,9 @@ function App() {
   React.useEffect(() => { document.body.dataset.route = route.name; }, [route]);
 
   const subtotal = cart.subtotal;
-  const shipping = subtotal >= 999 ? 0 : 80;
+  const FREE_AT = +shipping.free || 499;
+  const RATE = +shipping.rate || 80;
+  const shippingFee = subtotal >= FREE_AT ? 0 : RATE;
   const gst = Math.round(subtotal * 0.05);
 
   return (
@@ -106,7 +109,7 @@ function App() {
       <Footer onNav={nav} />
 
       <CartDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} cart={cart} onNav={nav} />
-      <PaymentModal open={payOpen} total={pendingForm ? subtotal + shipping + gst : 0}
+      <PaymentModal open={payOpen} total={pendingForm ? subtotal + shippingFee + gst : 0}
                     onClose={() => setPayOpen(false)} onPaid={onPaid} />
       <Toasts toasts={toasts.toasts} />
     </React.Fragment>

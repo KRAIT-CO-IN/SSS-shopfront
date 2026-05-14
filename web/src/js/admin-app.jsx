@@ -73,14 +73,23 @@ function AdminApp() {
     return adapted;
   }, []);
 
-  // Initial hydration after auth
+  // Initial hydration after auth — only the cheap, immediately-needed data
   React.useEffect(() => {
     if (!authed) return;
     setLoading(true);
-    Promise.all([refreshCategories(), refreshProducts(), refreshTxns()])
+    Promise.all([refreshCategories(), refreshProducts()])
       .catch((e) => toasts.push("Load failed: " + e.message))
       .finally(() => setLoading(false));
   }, [authed]);
+
+  // Lazy-load transactions only when user visits the Transactions page
+  const [txnsLoaded, setTxnsLoaded] = React.useState(false);
+  React.useEffect(() => {
+    if (!authed) return;
+    if (route.name !== "transactions") return;
+    if (txnsLoaded) return;
+    refreshTxns().then(() => setTxnsLoaded(true)).catch((e) => toasts.push("Load failed: " + e.message));
+  }, [authed, route.name, txnsLoaded]);
 
   const nav = (name, idOrTab) => {
     if (name === "settings" && idOrTab) window.location.hash = `#/settings/${idOrTab}`;

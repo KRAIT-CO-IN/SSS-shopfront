@@ -78,6 +78,31 @@ function useCatalog() {
   return { ready, products: PRODUCTS, categories: CATEGORIES };
 }
 
+// ─────────────────────────────────────────────
+// Live shipping settings — sourced from /api/settings/shipping (admin-controlled)
+// ─────────────────────────────────────────────
+const SHIPPING = { free: 499, rate: 80, eta: "2-4 Business Days", cod: true };
+
+async function hydrateShipping() {
+  try {
+    const r = await window.API.settings.get("shipping");
+    if (r?.value) Object.assign(SHIPPING, r.value);
+    window.dispatchEvent(new CustomEvent("shipping:ready"));
+  } catch (e) { /* keep defaults */ }
+}
+
+function useShippingSettings() {
+  const [v, setV] = React.useState({ ...SHIPPING });
+  React.useEffect(() => {
+    let mounted = true;
+    hydrateShipping().then(() => mounted && setV({ ...SHIPPING }));
+    const on = () => mounted && setV({ ...SHIPPING });
+    window.addEventListener("shipping:ready", on);
+    return () => { mounted = false; window.removeEventListener("shipping:ready", on); };
+  }, []);
+  return v;
+}
+
 const CART_KEY = "sss-cart-v1";
 function loadCart() { try { const r = localStorage.getItem(CART_KEY); return r ? JSON.parse(r) : []; } catch (e) { return []; } }
 function saveCart(items) { try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) {} }
@@ -169,7 +194,8 @@ function Icon({ name, size = 18, stroke = 1.7, ...props }) {
 const fmt = (n) => `₹${(n || 0).toLocaleString("en-IN")}`;
 
 Object.assign(window, {
-  CATEGORIES, COLLECTION, PRODUCTS, TOP_BAR_LINES,
+  CATEGORIES, COLLECTION, PRODUCTS, TOP_BAR_LINES, SHIPPING,
   useCart, useToasts, useCatalog, hydrateCatalog,
+  useShippingSettings, hydrateShipping,
   Icon, fmt,
 });

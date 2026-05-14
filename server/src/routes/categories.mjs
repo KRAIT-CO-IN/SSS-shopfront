@@ -2,7 +2,8 @@ function nextCid(n) { return `CAT-${String(n).padStart(3, "0")}`; }
 function slugify(s) { return (s || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
 
 export default async function categoryRoutes(app) {
-  app.get("/", async () => {
+  app.get("/", async (req, reply) => {
+    reply.header("cache-control", "public, s-maxage=15, stale-while-revalidate=120");
     const cats = await app.prisma.category.findMany({
       orderBy: [{ order: "asc" }, { createdAt: "asc" }],
       include: { _count: { select: { products: true } } },
