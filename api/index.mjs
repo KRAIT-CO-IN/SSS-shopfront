@@ -47,6 +47,14 @@ async function getApp() {
 }
 
 export default async function handler(req, res) {
+  // Vercel rewrites overwrite req.url with the destination ("/api/index").
+  // Restore the original request path so Fastify route matching works.
+  const original =
+    req.headers["x-forwarded-uri"] ||
+    req.headers["x-vercel-original-url"] ||
+    req.headers["x-original-url"] ||
+    req.url;
+  req.url = original;
   const app = await getApp();
   app.server.emit("request", req, res);
 }
