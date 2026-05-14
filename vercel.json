@@ -2,15 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
   "outputDirectory": "public",
-  "functions": {
-    "api/[...path].mjs": {
-      "includeFiles": "server/src/routes/**",
-      "maxDuration": 30,
-      "memory": 1024
-    }
-  },
   "rewrites": [
-    { "source": "/((?!api|assets|js|styles|favicon|.*\\..*).*)", "destination": "/index.html" }
+    { "source": "/api/:path*", "destination": "/api/index" },
+    { "source": "/((?!api/|assets/|js/|styles/|favicon|.*\\..*).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
