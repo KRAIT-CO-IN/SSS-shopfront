@@ -8,3 +8,5 @@ public/
 *.log
 .vercel
 prisma/migrations/
+web/dist.bak/
+package-lock.json
