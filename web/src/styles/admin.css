@@ -823,6 +823,22 @@
 .adm-daterange .arrow { color: var(--ac-muted); flex-shrink: 0; }
 .adm-daterange .abtn { flex-shrink: 0; }
 
+/* Search input with icon inside */
+.asearch-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+.asearch-wrap .asearch-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ac-muted);
+  pointer-events: none;
+}
+.asearch-input { padding-left: 40px !important; }
+
 .aquick {
   display: inline-flex;
   align-items: center;

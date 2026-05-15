@@ -37,29 +37,40 @@ function HomePage({ onNav }) {
         </div>
       </section>
 
-      {/* Collection — round-robin across categories so every category gets a slot */}
+      {/* Collection — single-line auto-scroll marquee, round-robin across categories */}
       <section className="section">
         <div className="container">
           <div className="section-title"><h2 className="h-1">Explore Our Collection</h2></div>
-          {PRODUCTS.length > 0 ? (
-            <div className="collection-grid">
-              {roundRobinByCategory(PRODUCTS, 10).map((p, idx) => (
-                <button key={p.id} className="collection-tile"
-                        onClick={() => onNav("product", p.id)}
-                        aria-label={`${p.name} — view product`}>
-                  <span className="collection-tile-media">
-                    <img src={p.img} alt={p.name}
-                         loading={idx < 5 ? "eager" : "lazy"}
-                         fetchpriority={idx < 2 ? "high" : "auto"} />
-                  </span>
-                  <span className="collection-tile-label">{p.name}</span>
-                  <span className="collection-tile-price">{fmt(Math.min(...p.weights.map((w) => w.price)))}</span>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="collection-grid" aria-busy="true" aria-label="Loading featured products">
-              {Array.from({ length: 10 }).map((_, i) => (
+        </div>
+        {PRODUCTS.length > 0 ? (
+          (() => {
+            const picked = roundRobinByCategory(PRODUCTS, 10);
+            // Duplicate the list so the CSS animation loops seamlessly when it shifts -50%
+            const track = [...picked, ...picked];
+            return (
+              <div className="collection-marquee" aria-label="Featured products">
+                <div className="collection-marquee-track">
+                  {track.map((p, idx) => (
+                    <button key={`${p.id}-${idx}`} className="collection-tile"
+                            onClick={() => onNav("product", p.id)}
+                            aria-label={`${p.name} — view product`}>
+                      <span className="collection-tile-media">
+                        <img src={p.img} alt={p.name}
+                             loading={idx < 5 ? "eager" : "lazy"}
+                             fetchpriority={idx < 2 ? "high" : "auto"} />
+                      </span>
+                      <span className="collection-tile-label">{p.name}</span>
+                      <span className="collection-tile-price">{fmt(Math.min(...p.weights.map((w) => w.price)))}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })()
+        ) : (
+          <div className="collection-marquee" aria-busy="true" aria-label="Loading featured products">
+            <div className="collection-marquee-track" style={{ animation: "none" }}>
+              {Array.from({ length: 8 }).map((_, i) => (
                 <div className="collection-tile" key={`sk-${i}`}>
                   <span className="collection-tile-media skeleton-shimmer" />
                   <span className="skeleton-line skeleton-shimmer" style={{ width: "70%" }} />
@@ -67,8 +78,8 @@ function HomePage({ onNav }) {
                 </div>
               ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </section>
 
       {/* Process */}

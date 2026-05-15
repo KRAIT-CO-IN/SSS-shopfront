@@ -652,9 +652,9 @@ function TransactionsPage({ txns, onView }) {
     <React.Fragment>
       <div className="adm-card" style={{ padding: 22 }}>
         <div className="adm-daterange" style={{ marginBottom: 14 }}>
-          <input className="ainput" placeholder="DD/MM/YYYY" />
+          <input className="ainput" type="date" aria-label="Start date" />
           <span className="arrow"><AIcon name="arrow-r" size={16} /></span>
-          <input className="ainput" placeholder="DD/MM/YYYY" />
+          <input className="ainput" type="date" aria-label="End date" />
           <button className="abtn abtn--primary abtn--sm">Apply</button>
         </div>
         <div className="aquick">
@@ -671,9 +671,9 @@ function TransactionsPage({ txns, onView }) {
           <select className="aselect" style={{ maxWidth: 180 }}>
             <option>All Status</option><option>Completed</option><option>Failed</option><option>Refunded</option>
           </select>
-          <div className="search" style={{ flex: 1, minWidth: 220, position: "relative" }}>
-            <AIcon name="search" size={16}/>
-            <input className="ainput" placeholder="Transaction ID, Order ID…" style={{ paddingLeft: 38 }} />
+          <div className="asearch-wrap">
+            <AIcon name="search" size={16} className="asearch-icon" />
+            <input className="ainput asearch-input" placeholder="Transaction ID, Order ID…" />
           </div>
           <a className="abtn abtn--ghost" href={window.API.orders.exportCsv()} target="_blank" rel="noopener">
             <AIcon name="down" size={16} /> Export CSV
