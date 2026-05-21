@@ -8,7 +8,7 @@ function Logo({ size = "md", onNav }) {
   const handleClick = (e) => { e.preventDefault(); if (onNav) onNav("home"); };
   return (
     <a href="#/" className={`logo logo--${size}`} onClick={handleClick} aria-label="SSS Food World — Home">
-      <img src="/assets/sss-logo-v3.png" alt="SSS Food World — Taste Lasts Forever" className="logo-img" />
+      <img src="/assets/sss-logo-final.png" alt="SSS Food World — Taste Lasts Forever" className="logo-img" />
     </a>
   );
 }

@@ -22,7 +22,7 @@ function LoginPage({ onLogin }) {
     <div className="adm-login-wrap">
       <form className="adm-login" onSubmit={submit}>
         <div className="adm-login-logo">
-          <img src="/assets/sss-logo-v3.png" alt="SSS Food World" className="adm-login-img" />
+          <img src="/assets/sss-logo-final.png" alt="SSS Food World" className="adm-login-img" />
         </div>
         <div className="adm-login-title">Admin Portal</div>
 

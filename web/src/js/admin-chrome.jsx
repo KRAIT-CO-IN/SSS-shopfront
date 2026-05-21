@@ -4,7 +4,7 @@
 function AdmBrand() {
   return (
     <div className="adm-brand">
-      <img src="/assets/sss-logo-v3.png" alt="SSS Food World" className="adm-brand-img" />
+      <img src="/assets/sss-logo-final.png" alt="SSS Food World" className="adm-brand-img" />
       <span className="adm-brand-pill">ADMIN</span>
     </div>
   );
