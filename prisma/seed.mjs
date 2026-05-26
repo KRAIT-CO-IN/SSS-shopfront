@@ -153,11 +153,12 @@ async function run() {
     update: {},
   });
 
-  // Categories
+  // Categories — upsert by slug (slug is unique). Lets us rewrite legacy
+  // rows like CAT-001/CAT-002 in place instead of colliding on their slugs.
   const catMap = {};
   for (const c of categories) {
     const row = await prisma.category.upsert({
-      where: { cid: c.cid },
+      where: { slug: c.slug },
       create: c,
       update: c,
     });
