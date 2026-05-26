@@ -41,14 +41,46 @@ function TopBar() {
 // Header
 // ─────────────────────────────────────────────
 function Header({ route, onNav, cartCount, onOpenCart }) {
-  const [scrolled, setScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
+  const innerRef = React.useRef(null);
+  const headerRef = React.useRef(null);
+  const logoXRef = React.useRef(0);
 
   React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    let ticking = false;
+    const apply = () => {
+      ticking = false;
+      const sp = Math.min(1, Math.max(0, window.scrollY / 320));
+      if (headerRef.current) {
+        headerRef.current.style.setProperty("--sp", sp);
+        headerRef.current.style.setProperty("--logo-x", logoXRef.current + "px");
+      }
+      setScrolled((prev) => {
+        const next = sp > 0.05;
+        return prev === next ? prev : next;
+      });
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(apply);
+      }
+    };
+    const compute = () => {
+      if (!innerRef.current) return;
+      const innerW = innerRef.current.clientWidth;
+      const scaledLogoW = 380 * 0.45;
+      logoXRef.current = Math.round(-((innerW - scaledLogoW) / 2) + 12);
+      apply();
+    };
+    compute();
     window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", compute);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", compute);
+    };
   }, []);
 
   React.useEffect(() => { setMobileOpen(false); }, [route]);
@@ -75,8 +107,8 @@ function Header({ route, onNav, cartCount, onOpenCart }) {
   return (
     <React.Fragment>
       <TopBar />
-      <header className={`header${scrolled ? " is-scrolled" : ""}`} role="banner">
-        <div className="container header-inner">
+      <header className={`header${scrolled ? " is-scrolled" : ""}`} role="banner" ref={headerRef}>
+        <div className="container header-inner" ref={innerRef}>
           <Logo onNav={onNav} />
           <nav className="nav" aria-label="Primary">
             {navItems.map((n) => {
