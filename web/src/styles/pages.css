@@ -1214,8 +1214,8 @@
   .topbar { font-size: 10px; letter-spacing: 1.2px; padding: 0 12px; text-align: center; }
   .container { padding-left: 16px; padding-right: 16px; }
   .header-inner { gap: 8px; }
-  .logo-img { height: 64px; }
-  .footer .logo-img { height: 80px; }
+  .logo-img { height: 80px; }
+  .footer .logo-img { height: 96px; }
   .modal-head .logo-img { height: 60px; }
   .icon-btn { width: 36px; height: 36px; }
   .page-hero { height: 200px; }

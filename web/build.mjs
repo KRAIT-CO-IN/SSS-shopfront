@@ -55,6 +55,7 @@ async function buildHtml() {
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23C4121F'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia,serif' font-weight='700' font-size='17' fill='white'%3ES%3C/text%3E%3C/svg%3E" />
   <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  ${process.env.API_BASE ? `<script>window.__API_BASE__=${JSON.stringify(process.env.API_BASE)};</script>` : ""}
 </head>
 <body>
   <a class="sr-only" href="#main">Skip to content</a>
@@ -82,6 +83,7 @@ async function buildHtml() {
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23C4121F'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia,serif' font-weight='700' font-size='17' fill='white'%3ES%3C/text%3E%3C/svg%3E" />
   <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  ${process.env.API_BASE ? `<script>window.__API_BASE__=${JSON.stringify(process.env.API_BASE)};</script>` : ""}
 </head>
 <body class="admin-body">
   <div id="root"></div>

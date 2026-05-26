@@ -404,15 +404,15 @@ img { display: block; max-width: 100%; }
   flex-shrink: 0;
 }
 .logo-img {
-  height: 92px;
+  height: 115px;
   width: auto;
   display: block;
   object-fit: contain;
 }
-.logo--sm .logo-img { height: 64px; }
-.logo--lg .logo-img { height: 120px; }
+.logo--sm .logo-img { height: 72px; }
+.logo--lg .logo-img { height: 140px; }
 /* On dark backgrounds (footer / payment modal head) */
-.footer .logo-img { height: 96px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+.footer .logo-img { height: 120px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
 .modal-head .logo-img { height: 72px; }
 
 /* Footer */

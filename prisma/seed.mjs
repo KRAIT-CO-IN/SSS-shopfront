@@ -172,11 +172,11 @@ async function run() {
     data: { status: "Draft" },
   });
 
-  // Drop legacy products not in new pid list (mark unpublished)
+  // Drop legacy products not in new pid list — move to Draft (xlsx is the source of truth)
   const keepPids = products.map((p) => p.pid);
   await prisma.product.updateMany({
     where: { pid: { notIn: keepPids } },
-    data: { status: "Out of Stock", visible: false },
+    data: { status: "Draft", visible: false },
   });
 
   // Upsert products

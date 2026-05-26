@@ -66,7 +66,7 @@ async function hydrateCatalog() {
     }
     PRODUCTS.length = 0;
     for (const p of (prods.items || [])) {
-      if (p.status === "Out of Stock") continue;
+      if (p.status === "Out of Stock" || p.status === "Draft") continue;
       PRODUCTS.push(adaptProduct(p));
     }
     window.dispatchEvent(new CustomEvent("catalog:ready"));
