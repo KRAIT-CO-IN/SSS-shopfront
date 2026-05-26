@@ -324,6 +324,74 @@
 }
 
 /* ──────────────────────────────────────────────
+   Contact Section
+   ────────────────────────────────────────────── */
+.contact { background: #FAF5EA; }
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+.contact-card {
+  background: #fff;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  padding: 28px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 18px rgba(44,26,14,0.06);
+}
+.contact-card h4 {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  color: var(--c-ink-2);
+  margin: 4px 0 6px;
+}
+.contact-card p {
+  margin: 0;
+  color: var(--c-ink-3);
+  line-height: 1.55;
+  font-size: 15px;
+}
+.contact-card a { color: var(--c-primary); }
+.contact-card a:hover { text-decoration: underline; }
+.contact-socials {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 28px;
+  color: var(--c-ink-3);
+}
+.contact-socials span { font-weight: 600; margin-right: 6px; }
+.contact-socials a {
+  width: 44px; height: 44px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--c-line);
+  color: var(--c-primary);
+  transition: transform .15s ease, background .15s ease, color .15s ease;
+}
+.contact-socials a:hover { transform: translateY(-2px); background: var(--c-primary); color: #fff; }
+.footer-contact { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.footer-contact li { font-size: 14px; line-height: 1.5; color: var(--c-on-footer-mute); }
+.footer-contact a, .footer-contact span {
+  color: var(--c-on-footer);
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.footer-contact a:hover { color: #fff; }
+@media (max-width: 900px) {
+  .contact-grid { grid-template-columns: 1fr; }
+}
+
+/* ──────────────────────────────────────────────
    Shop / Listing
    ────────────────────────────────────────────── */
 .page-hero {

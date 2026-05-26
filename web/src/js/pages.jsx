@@ -14,12 +14,12 @@ function HomePage({ onNav }) {
         <div className="hero-content fade-up">
           <div className="hero-eyebrow-row">
             <span>AUTHENTIC</span><span className="sep">|</span>
-            <span>HANDCRAFTED</span><span className="sep">|</span>
+            <span>ANDHRA ROOTS</span><span className="sep">|</span>
             <span>DELIVERED FRESH</span>
           </div>
-          <h1 className="h-display balanced">Taste the<br/>Authentic<br/>Flavors</h1>
-          <p className="body-lg pretty" style={{ maxWidth: 480 }}>
-            Handcrafted spice powders, pickles & more — made with love and zero preservatives, straight from small kitchens in Andhra.
+          <h1 className="h-display balanced">We Bring Food<br/>From Their<br/>Roots</h1>
+          <p className="body-lg pretty" style={{ maxWidth: 520 }}>
+            Authentic Andhra dry fruits, sweets, podis &amp; more — sourced directly from renowned local makers and delivered to your doorstep.
           </p>
           <div className="hero-actions">
             <button className="btn btn--primary" onClick={() => onNav("shop")}>
@@ -82,30 +82,57 @@ function HomePage({ onNav }) {
         )}
       </section>
 
-      {/* Process */}
+      {/* About / Our Story */}
       <section className="section process" id="story">
         <div className="container">
           <div className="section-title"><h2 className="h-1">Made With Love &amp; Respect</h2></div>
           <div className="process-grid">
             <div className="process-steps">
-              {[
-                { n: "01", t: "Source the finest raw materials", d: "We partner with sustainable farms to ensure only the highest quality ingredients reach our kitchen." },
-                { n: "02", t: "Traditional stone grinding process", d: "Slow stone grinding preserves natural oils and rich, authentic flavors that machines simply cannot replicate." },
-                { n: "03", t: "Sun-dried for natural preservation", d: "Harnessing the power of natural sunlight to lock in nutrients and extend shelf life organically." },
-                { n: "04", t: "Hand-packed with care", d: "Every jar is inspected and sealed by hand, ensuring our artisanal standards are met." },
-                { n: "05", t: "Delivered fresh to your doorstep", d: "Expedited, eco-friendly shipping brings the warmth of our kitchen directly to yours." },
-              ].map((s) => (
-                <div className="step" key={s.n}>
-                  <div className="step-no">STEP {s.n}</div>
-                  <h3>{s.t}</h3>
-                  <p>{s.d}</p>
-                </div>
-              ))}
+              <div className="step">
+                <div className="step-no">OUR STORY</div>
+                <h3>Authentic flavors of Andhra, delivered with care</h3>
+                <p>At SSS Food World, we bring the authentic taste of Andhra Pradesh right to your doorstep. Our mission is simple — to connect you with the finest dry fruits and the most loved traditional sweets sourced from across the state.</p>
+                <p>We carefully select premium-quality dry fruits and partner with renowned local sweet makers who are known for their rich heritage and unmatched flavors. Whether it's the crunch of handpicked nuts or the sweetness of time-honored delicacies, every product we deliver carries the essence of tradition, purity, and trust.</p>
+                <p>We understand that food is not just about taste — it's about memories, celebrations, and emotions. That's why we ensure freshness, quality, and timely delivery, so you can enjoy your favorite treats without stepping out.</p>
+                <p>SSS Food World is more than just a brand — it's your gateway to the authentic flavors of Andhra, delivered with care.</p>
+              </div>
             </div>
             <div className="process-aside">
-              <div className="process-quote">"Authenticity isn't just a word; it's the rhythm of our tradition."</div>
+              <div className="process-quote">"We bring food from their roots."</div>
               <div className="process-image" role="img" aria-label="Bowls of fresh ground spices scattered with chilies" />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Us */}
+      <section className="section contact" id="contact">
+        <div className="container">
+          <div className="section-title"><h2 className="h-1">Contact Us</h2></div>
+          <div className="contact-grid">
+            <div className="contact-card">
+              <Icon name="phone" size={22} />
+              <h4>Call / WhatsApp</h4>
+              <p><a href="tel:+917675808874">+91 76758 08874</a></p>
+              <p><a href="tel:+917093704033">+91 70937 04033</a></p>
+            </div>
+            <div className="contact-card">
+              <Icon name="globe" size={22} />
+              <h4>Visit Our Store</h4>
+              <p>Shop No. 3, Balaji Sadan,<br/>Opp. Municipal Park,<br/>Nizampet Vill., Medchal-Malkajgiri,<br/>Hyderabad - 500049.</p>
+            </div>
+            <div className="contact-card">
+              <Icon name="shield" size={22} />
+              <h4>FSSAI Licensed</h4>
+              <p>FSSAI Lic. No.<br/><b>23626029001407</b></p>
+            </div>
+          </div>
+          <div className="contact-socials">
+            <span>Follow Us</span>
+            <a href="https://instagram.com" target="_blank" rel="noreferrer noopener" aria-label="Instagram"><Icon name="instagram" size={22}/></a>
+            <a href="https://facebook.com" target="_blank" rel="noreferrer noopener" aria-label="Facebook"><Icon name="facebook" size={22}/></a>
+            <a href="https://youtube.com" target="_blank" rel="noreferrer noopener" aria-label="YouTube"><Icon name="youtube" size={22}/></a>
+            <a href="https://wa.me/917675808874" target="_blank" rel="noreferrer noopener" aria-label="WhatsApp"><Icon name="whatsapp" size={22}/></a>
           </div>
         </div>
       </section>

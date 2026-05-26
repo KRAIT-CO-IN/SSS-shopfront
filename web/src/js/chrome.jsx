@@ -54,8 +54,9 @@ function Header({ route, onNav, cartCount, onOpenCart }) {
   React.useEffect(() => { setMobileOpen(false); }, [route]);
 
   const navItems = [
-    { id: "story", label: "Our Story", route: "home", anchor: "story" },
-    { id: "shop",  label: "Shop",     route: "shop" },
+    { id: "story",   label: "Our Story", route: "home", anchor: "story" },
+    { id: "shop",    label: "Shop",      route: "shop" },
+    { id: "contact", label: "Contact",   route: "home", anchor: "contact" },
   ];
 
   const handleNavClick = (e, n) => {
@@ -129,15 +130,23 @@ function Header({ route, onNav, cartCount, onOpenCart }) {
 function Footer({ onNav }) {
   // Keep CATEGORIES live so adding from Admin Panel shows up here automatically.
   useCatalog();
+  const goAnchor = (e, anchor) => {
+    e.preventDefault();
+    onNav("home");
+    setTimeout(() => {
+      const el = document.getElementById(anchor);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      else window.scrollTo({ top: 0 });
+    }, 80);
+  };
   const nav = [
-    { l: "Shop",       route: "shop" },
-    { l: "Our Story",  route: "home" },
-    { l: "Contact Us", route: "home" },
+    { l: "Shop",       route: "shop",  anchor: null },
+    { l: "Our Story",  route: "home",  anchor: "story" },
+    { l: "Contact Us", route: "home",  anchor: "contact" },
   ];
   // Skip the synthetic "All" entry; cap at 5 published categories — keeps layout stable
   // no matter how many categories admin creates.
   const cats = window.CATEGORIES.filter((c) => c.id !== "all").slice(0, 5);
-  const info = ["Delivery Info", "Returns Policy", "Privacy", "Terms"];
 
   return (
     <footer className="footer" role="contentinfo">
@@ -145,11 +154,12 @@ function Footer({ onNav }) {
         <div className="footer-grid">
           <div className="footer-brand">
             <Logo onNav={onNav} />
-            <p>Crafting authentic, small-batch preserves and culinary essentials for the modern pantry.</p>
+            <p>Authentic Andhra dry fruits, sweets &amp; podis — sourced and delivered with care.</p>
             <div style={{ display: "flex", gap: 12, marginTop: 22, color: "var(--c-on-footer-mute)" }}>
-              <a href="#" aria-label="Instagram"><Icon name="instagram" /></a>
-              <a href="#" aria-label="Website"><Icon name="globe" /></a>
-              <a href="#" aria-label="Email"><Icon name="mail" /></a>
+              <a href="https://instagram.com" target="_blank" rel="noreferrer noopener" aria-label="Instagram"><Icon name="instagram" /></a>
+              <a href="https://facebook.com" target="_blank" rel="noreferrer noopener" aria-label="Facebook"><Icon name="facebook" /></a>
+              <a href="https://youtube.com" target="_blank" rel="noreferrer noopener" aria-label="YouTube"><Icon name="youtube" /></a>
+              <a href="https://wa.me/917675808874" target="_blank" rel="noreferrer noopener" aria-label="WhatsApp"><Icon name="whatsapp" /></a>
             </div>
           </div>
           <div className="footer-col">
@@ -157,7 +167,11 @@ function Footer({ onNav }) {
             <ul>
               {nav.map((n) => (
                 <li key={n.l}>
-                  <a href={`#/${n.route}`} onClick={(e) => { e.preventDefault(); onNav(n.route); window.scrollTo({top:0}); }}>{n.l}</a>
+                  <a href={`#/${n.route}${n.anchor ? "#" + n.anchor : ""}`}
+                     onClick={(e) => {
+                       if (n.anchor) goAnchor(e, n.anchor);
+                       else { e.preventDefault(); onNav(n.route); window.scrollTo({top:0}); }
+                     }}>{n.l}</a>
                 </li>
               ))}
             </ul>
@@ -178,8 +192,13 @@ function Footer({ onNav }) {
             </ul>
           </div>
           <div className="footer-col">
-            <h4>Information</h4>
-            <ul>{info.map((c) => <li key={c}><a href="#">{c}</a></li>)}</ul>
+            <h4>Get in Touch</h4>
+            <ul className="footer-contact">
+              <li><a href="tel:+917675808874"><Icon name="phone" size={14}/> +91 76758 08874</a></li>
+              <li><a href="tel:+917093704033"><Icon name="phone" size={14}/> +91 70937 04033</a></li>
+              <li><span><Icon name="mappin" size={14}/> Shop No. 3, Balaji Sadan, Opp. Municipal Park, Nizampet Vill., Medchal-Malkajgiri, Hyderabad - 500049.</span></li>
+              <li><span><Icon name="shield" size={14}/> FSSAI Lic. No. 23626029001407</span></li>
+            </ul>
           </div>
         </div>
         <div className="footer-bottom">

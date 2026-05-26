@@ -192,6 +192,10 @@ function Icon({ name, size = 18, stroke = 1.7, ...props }) {
     case "lock":      return <svg {...common}><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>;
     case "bolt":      return <svg {...common}><path d="M13 2L4 14h7l-1 8 9-12h-7z" fill="currentColor"/></svg>;
     case "instagram": return <svg {...common}><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>;
+    case "facebook":  return <svg {...common}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>;
+    case "youtube":   return <svg {...common}><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M10 9l5 3-5 3z" fill="currentColor"/></svg>;
+    case "whatsapp":  return <svg {...common}><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 21l2.1-5.4A8.5 8.5 0 1 1 21 11.5z"/><path d="M8.5 9.5c.4 2.5 3.5 5.6 6 6l1.5-1.5-2-1-1 1c-1.4-.4-2.6-1.6-3-3l1-1-1-2z"/></svg>;
+    case "mappin":    return <svg {...common}><path d="M12 22s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>;
     case "globe":     return <svg {...common}><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>;
     case "mail":      return <svg {...common}><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>;
     case "phone":     return <svg {...common}><path d="M22 16.9V21a1 1 0 0 1-1.1 1A19 19 0 0 1 2 4.1 1 1 0 0 1 3 3h4.1a1 1 0 0 1 1 .8l1 4a1 1 0 0 1-.3 1L7 10.6a16 16 0 0 0 6.4 6.4l1.7-1.7a1 1 0 0 1 1-.3l4 1a1 1 0 0 1 .9 1z"/></svg>;
