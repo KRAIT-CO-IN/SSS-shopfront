@@ -7,7 +7,7 @@ const IMG = {
   pootha:       "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pootharekulu.JPG/1280px-Pootharekulu.JPG",
   avakaya:      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Mango_pickle._jpg.jpg/1280px-Mango_pickle._jpg.jpg",
   boondiLaddu:  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Boondi_Laddu.JPG/1280px-Boondi_Laddu.JPG",
-  mango:        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Mangos_-_single_and_halved.jpg/1280px-Mangos_-_single_and_halved.jpg",
+  mango:        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Guntur_Mango.jpg/1280px-Guntur_Mango.jpg",
   ghee:         "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Home_made_Ghee.jpg/1280px-Home_made_Ghee.jpg",
   chekkalu:     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Chekkalu-_Sri_Sai_Telangana_foods%2CHafeezpet-Telangana-DSC_0004.jpg/1280px-Chekkalu-_Sri_Sai_Telangana_foods%2CHafeezpet-Telangana-DSC_0004.jpg",
   pickle:       "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Chilli_pickle_in_a_plate_2.jpg/1280px-Chilli_pickle_in_a_plate_2.jpg",
@@ -18,7 +18,7 @@ const IMG = {
   cashewSplit:  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Roasted_Cashew_Nuts_%2852746470588%29.jpg/1280px-Roasted_Cashew_Nuts_%2852746470588%29.jpg",
   spicesGen:    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Common_Indian_spices.jpg/1280px-Common_Indian_spices.jpg",
   chiliPowder:  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Byadgi_chili_powder.jpg/1280px-Byadgi_chili_powder.jpg",
-  karaPodi:     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Idli_podi.jpg/1280px-Idli_podi.jpg",
+  karaPodi:     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Andhra_Chillies.jpg/1280px-Andhra_Chillies.jpg",
 };
 
 const categories = [
