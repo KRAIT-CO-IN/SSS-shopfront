@@ -14,11 +14,11 @@ const IMG = {
   tomato:       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Tomato_Chutney.jpg/1280px-Tomato_Chutney.jpg",
   cashewBrittle:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Gur_Badam_or_Chikki.jpg/1280px-Gur_Badam_or_Chikki.jpg",
   toor:         "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Toor_dal.jpg/1280px-Toor_dal.jpg",
-  cashewJumbo:  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Pile_of_cashews.jpg/1280px-Pile_of_cashews.jpg",
-  cashewSplit:  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Roasted_Cashew_Nuts_%2852746470588%29.jpg/1280px-Roasted_Cashew_Nuts_%2852746470588%29.jpg",
+  cashewJumbo:  "https://images.pexels.com/photos/9811624/pexels-photo-9811624.jpeg?auto=compress&cs=tinysrgb&w=1280",
+  cashewSplit:  "https://images.pexels.com/photos/4663476/pexels-photo-4663476.jpeg?auto=compress&cs=tinysrgb&w=1280",
   spicesGen:    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Common_Indian_spices.jpg/1280px-Common_Indian_spices.jpg",
   chiliPowder:  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Byadgi_chili_powder.jpg/1280px-Byadgi_chili_powder.jpg",
-  karaPodi:     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Andhra_Chillies.jpg/1280px-Andhra_Chillies.jpg",
+  karaPodi:     "https://images.pexels.com/photos/5740405/pexels-photo-5740405.jpeg?auto=compress&cs=tinysrgb&w=1280",
 };
 
 const categories = [

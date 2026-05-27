@@ -17,7 +17,7 @@ function HomePage({ onNav }) {
             <span>ANDHRA ROOTS</span><span className="sep">|</span>
             <span>DELIVERED FRESH</span>
           </div>
-          <h1 className="h-display balanced">We Bring Food<br/>From Their<br/>Roots</h1>
+          <h1 className="h-display balanced">We Bring Food From Their Roots</h1>
           <p className="body-lg pretty" style={{ maxWidth: 520 }}>
             Authentic Andhra dry fruits, sweets, podis &amp; more — sourced directly from renowned local makers and delivered to your doorstep.
           </p>
