@@ -372,7 +372,7 @@ img { display: block; max-width: 100%; }
   align-items: center;
   gap: 12px;
   position: absolute;
-  right: var(--gutter);
+  right: clamp(16px, 1.5vw, 28px);
   top: calc(98px - var(--sp, 0) * 50px);
   transform: translateY(-50%);
   z-index: 2;

@@ -124,7 +124,8 @@ function Header({ route, onNav, cartCount, onOpenCart }) {
               );
             })}
           </nav>
-          <div className="header-tools">
+        </div>
+        <div className="header-tools">
             <button className="icon-btn" aria-label={`Cart, ${cartCount} items`} onClick={onOpenCart}>
               <Icon name="cart" />
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
@@ -133,7 +134,6 @@ function Header({ route, onNav, cartCount, onOpenCart }) {
               <Icon name="menu" />
             </button>
           </div>
-        </div>
       </header>
 
       {mobileOpen && (
