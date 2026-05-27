@@ -7,18 +7,18 @@ const IMG = {
   pootha:       "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pootharekulu.JPG/1280px-Pootharekulu.JPG",
   avakaya:      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Mango_pickle._jpg.jpg/1280px-Mango_pickle._jpg.jpg",
   boondiLaddu:  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Boondi_Laddu.JPG/1280px-Boondi_Laddu.JPG",
-  mango:        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Guntur_Mango.jpg/1280px-Guntur_Mango.jpg",
+  mango:        "/assets/product-mango.png",
   ghee:         "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Home_made_Ghee.jpg/1280px-Home_made_Ghee.jpg",
   chekkalu:     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Chekkalu-_Sri_Sai_Telangana_foods%2CHafeezpet-Telangana-DSC_0004.jpg/1280px-Chekkalu-_Sri_Sai_Telangana_foods%2CHafeezpet-Telangana-DSC_0004.jpg",
   pickle:       "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Chilli_pickle_in_a_plate_2.jpg/1280px-Chilli_pickle_in_a_plate_2.jpg",
   tomato:       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Tomato_Chutney.jpg/1280px-Tomato_Chutney.jpg",
   cashewBrittle:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Gur_Badam_or_Chikki.jpg/1280px-Gur_Badam_or_Chikki.jpg",
   toor:         "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Toor_dal.jpg/1280px-Toor_dal.jpg",
-  cashewJumbo:  "https://images.pexels.com/photos/9811624/pexels-photo-9811624.jpeg?auto=compress&cs=tinysrgb&w=1280",
-  cashewSplit:  "https://images.pexels.com/photos/4663476/pexels-photo-4663476.jpeg?auto=compress&cs=tinysrgb&w=1280",
+  cashewJumbo:  "/assets/product-cashew-jumbo.jpg",
+  cashewSplit:  "/assets/product-cashew-split.jpg",
   spicesGen:    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Common_Indian_spices.jpg/1280px-Common_Indian_spices.jpg",
   chiliPowder:  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Byadgi_chili_powder.jpg/1280px-Byadgi_chili_powder.jpg",
-  karaPodi:     "https://images.pexels.com/photos/5740405/pexels-photo-5740405.jpeg?auto=compress&cs=tinysrgb&w=1280",
+  karaPodi:     "/assets/product-nalla-karam.jpg",
 };
 
 const categories = [

@@ -195,7 +195,6 @@ function CollectionGlyph({ color, id }) {
 function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
   const catalog = useCatalog();
   const [activeCat, setActiveCat] = React.useState(initialCategory || "all");
-  const [maxPrice, setMaxPrice] = React.useState(1000);
   const [page, setPage] = React.useState(1);
   const [weightByProduct, setWeightByProduct] = React.useState({}); // {productId: weight}
   const perPage = 6;
@@ -204,8 +203,6 @@ function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
 
   const filtered = PRODUCTS.filter((p) => {
     if (activeCat !== "all" && p.category !== activeCat) return false;
-    const cheapest = Math.min(...p.weights.map((w) => w.price));
-    if (cheapest > maxPrice) return false;
     return true;
   });
 
@@ -235,18 +232,6 @@ function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
                   {c.label}
                 </button>
               ))}
-            </div>
-          </div>
-
-          <div className="filters-section">
-            <h4>Max Price</h4>
-            <div className="filter-range">
-              <input type="range" min="50" max="1000" step="10"
-                     value={maxPrice}
-                     onChange={(e) => { setMaxPrice(+e.target.value); setPage(1); }} />
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "var(--c-muted)" }}>
-                <span>{fmt(50)}</span><span><b style={{ color: "var(--c-primary)" }}>{fmt(maxPrice)}</b></span>
-              </div>
             </div>
           </div>
 

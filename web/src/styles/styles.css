@@ -451,8 +451,8 @@ img { display: block; max-width: 100%; }
 .footer {
   background: var(--c-footer);
   color: var(--c-on-footer);
-  padding: 56px 0 28px;
-  margin-top: 32px;
+  padding: 40px 0 24px;
+  margin-top: 0;
 }
 .footer-grid {
   display: grid;
