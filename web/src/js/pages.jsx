@@ -60,7 +60,9 @@ function HomePage({ onNav }) {
                              fetchpriority={idx < 2 ? "high" : "auto"} />
                       </span>
                       <span className="collection-tile-label">{p.name}</span>
-                      <span className="collection-tile-price">{fmt(Math.min(...p.weights.map((w) => w.price)))}</span>
+                      {(p.tags || []).includes("Coming Soon") || /coming soon/i.test(p.name)
+                        ? <span className="collection-tile-price">Coming Soon</span>
+                        : <span className="collection-tile-price">{fmt(Math.min(...p.weights.map((w) => w.price)))}</span>}
                     </button>
                   ))}
                 </div>
@@ -280,12 +282,13 @@ function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
               {visible.map((p, idx) => {
                 const selectedW = weightByProduct[p.id] || p.weights[0].w;
                 const sel = p.weights.find((w) => w.w === selectedW) || p.weights[0];
+                const comingSoon = (p.tags || []).includes("Coming Soon") || /coming soon/i.test(p.name);
                 return (
                   <article className="p-row fade-up" key={p.id}
-                           onClick={() => onNav("product", p.id)}
-                           onKeyDown={(e) => { if (e.key === "Enter") onNav("product", p.id); }}
-                           tabIndex={0} role="link"
-                           aria-label={`${p.name} — view details`}>
+                           onClick={() => { if (!comingSoon) onNav("product", p.id); }}
+                           onKeyDown={(e) => { if (e.key === "Enter" && !comingSoon) onNav("product", p.id); }}
+                           tabIndex={comingSoon ? -1 : 0} role={comingSoon ? "article" : "link"}
+                           aria-label={`${p.name}${comingSoon ? " — coming soon" : " — view details"}`}>
                     <div className="p-row-media">
                       <img src={p.img} alt={p.name} loading={idx < 3 ? "eager" : "lazy"} fetchpriority={idx < 1 ? "high" : "auto"} />
                     </div>
@@ -297,22 +300,28 @@ function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
                       </div>
                     </div>
                     <div className="p-row-side" onClick={(e) => e.stopPropagation()}>
-                      <div className="weight-row">
-                        {p.weights.map((w) => (
-                          <button key={w.w}
-                                  className={`weight-chip${selectedW === w.w ? " is-active" : ""}`}
-                                  onClick={() => setWeightByProduct({ ...weightByProduct, [p.id]: w.w })}>
-                            {w.w}
+                      {comingSoon ? (
+                        <span className="coming-soon-badge">Coming Soon</span>
+                      ) : (
+                        <>
+                          <div className="weight-row">
+                            {p.weights.map((w) => (
+                              <button key={w.w}
+                                      className={`weight-chip${selectedW === w.w ? " is-active" : ""}`}
+                                      onClick={() => setWeightByProduct({ ...weightByProduct, [p.id]: w.w })}>
+                                {w.w}
+                              </button>
+                            ))}
+                          </div>
+                          <div className="price-row">
+                            <span className="price">{fmt(sel.price)}</span>
+                            {sel.mrp > sel.price && <span className="price-strike">{fmt(sel.mrp)}</span>}
+                          </div>
+                          <button className="btn btn--primary btn--sm" onClick={() => onAddToCart(p, sel)}>
+                            <Icon name="cart" size={14}/> Add to Cart
                           </button>
-                        ))}
-                      </div>
-                      <div className="price-row">
-                        <span className="price">{fmt(sel.price)}</span>
-                        {sel.mrp > sel.price && <span className="price-strike">{fmt(sel.mrp)}</span>}
-                      </div>
-                      <button className="btn btn--primary btn--sm" onClick={() => onAddToCart(p, sel)}>
-                        <Icon name="cart" size={14}/> Add to Cart
-                      </button>
+                        </>
+                      )}
                     </div>
                   </article>
                 );

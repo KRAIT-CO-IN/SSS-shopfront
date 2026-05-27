@@ -333,14 +333,14 @@ img { display: block; max-width: 100%; }
   box-shadow: 0 1px 0 rgba(0,0,0,0.02);
 }
 .header-inner {
-  height: calc(320px - var(--sp, 0) * 220px);
+  height: calc(260px - var(--sp, 0) * 160px);
   position: relative;
 }
 .nav {
   position: absolute;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) translateY(calc(120px * (1 - var(--sp, 0))));
+  top: calc(212px - var(--sp, 0) * 162px);
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -373,7 +373,7 @@ img { display: block; max-width: 100%; }
   gap: 12px;
   position: absolute;
   right: var(--gutter);
-  top: 50%;
+  top: calc(98px - var(--sp, 0) * 50px);
   transform: translateY(-50%);
   z-index: 2;
 }
@@ -419,12 +419,12 @@ img { display: block; max-width: 100%; }
 .header-inner .logo {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 8px;
   width: 380px;
-  height: 200px;
+  height: 180px;
   justify-content: center;
-  transform: translate(-50%, -50%) translateX(calc(var(--logo-x, 0px) * var(--sp, 0))) scale(calc(1 - var(--sp, 0) * 0.55));
-  transform-origin: center;
+  transform: translateX(-50%) translateX(calc(var(--logo-x, 0px) * var(--sp, 0))) scale(calc(1 - var(--sp, 0) * 0.55));
+  transform-origin: top center;
   will-change: transform;
   backface-visibility: hidden;
   z-index: 1;
@@ -436,7 +436,7 @@ img { display: block; max-width: 100%; }
   object-fit: contain;
 }
 .header-inner .logo-img {
-  height: 200px;
+  height: 180px;
   width: 380px;
   object-fit: contain;
 }
@@ -450,8 +450,8 @@ img { display: block; max-width: 100%; }
 .footer {
   background: var(--c-footer);
   color: var(--c-on-footer);
-  padding: 80px 0 32px;
-  margin-top: 80px;
+  padding: 56px 0 28px;
+  margin-top: 32px;
 }
 .footer-grid {
   display: grid;
@@ -497,17 +497,18 @@ img { display: block; max-width: 100%; }
 .menu-toggle { display: none; }
 
 @media (max-width: 860px) {
-  :root { --header-h: 220px; }
-  .header-inner { height: calc(220px - var(--sp, 0) * 120px); }
+  :root { --header-h: 170px; }
+  .header-inner { height: calc(170px - var(--sp, 0) * 90px); }
   .header-inner .logo {
     width: 260px;
-    height: 140px;
+    height: 130px;
+    top: 6px;
   }
   .header-inner .logo-img {
-    height: 140px;
+    height: 130px;
     width: 260px;
   }
-  .nav { transform: translate(-50%, -50%) translateY(calc(80px * (1 - var(--sp, 0)))); }
+  .header-inner .header-tools { top: calc(65px - var(--sp, 0) * 25px); }
   .nav { display: none; }
   .menu-toggle { display: inline-flex; }
   .topbar {
