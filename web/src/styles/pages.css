@@ -6,7 +6,7 @@
 .hero {
   display: grid;
   grid-template-columns: 1.05fr 1fr;
-  min-height: 460px;
+  min-height: 600px;
 }
 .hero-media {
   position: relative;
