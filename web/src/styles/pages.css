@@ -590,6 +590,55 @@
   border-color: var(--c-primary);
   color: #fff;
 }
+/* Shop: per-weight packet steppers — add 250g/500g/1kg packets independently */
+.weight-qty-list { display: flex; flex-direction: column; gap: 8px; }
+.weight-qty-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 8px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-sm);
+  background: #fff;
+  transition: border-color .15s ease, background .15s ease;
+}
+.weight-qty-row.is-chosen { border-color: var(--c-primary); background: var(--c-surface-2); }
+.wq-info { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.wq-weight {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 1px;
+  color: var(--c-ink-2);
+}
+.wq-price { font-family: var(--font-serif); font-size: 17px; font-weight: 700; color: var(--c-primary); }
+.wq-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--c-line);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+.wq-stepper button {
+  width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--c-ink-2);
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.wq-stepper button:hover { background: var(--c-surface-2); }
+.wq-stepper button:disabled { opacity: 0.35; cursor: not-allowed; }
+.wq-count {
+  min-width: 26px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-ink-2);
+}
+
 .price-row { display: flex; align-items: baseline; gap: 8px; }
 .price {
   font-family: var(--font-serif);

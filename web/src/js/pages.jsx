@@ -196,8 +196,24 @@ function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
   const catalog = useCatalog();
   const [activeCat, setActiveCat] = React.useState(initialCategory || "all");
   const [page, setPage] = React.useState(1);
-  const [weightByProduct, setWeightByProduct] = React.useState({}); // {productId: weight}
+  // Per-product, per-weight packet quantities: { [productId]: { [weight]: qty } }
+  const [qtyByProduct, setQtyByProduct] = React.useState({});
   const perPage = 6;
+
+  const getQty = (pid, w) => (qtyByProduct[pid] && qtyByProduct[pid][w]) || 0;
+  const setQty = (pid, w, v) => {
+    const next = Math.max(0, Math.min(99, v));
+    setQtyByProduct((prev) => ({ ...prev, [pid]: { ...(prev[pid] || {}), [w]: next } }));
+  };
+  // Add every weight whose packet count > 0 as its own cart line.
+  // If nothing was stepped up, fall back to a single packet of the first weight.
+  const addPackets = (p) => {
+    const map = qtyByProduct[p.id] || {};
+    const chosen = p.weights.filter((w) => (map[w.w] || 0) > 0);
+    if (!chosen.length) { onAddToCart(p, p.weights[0], 1); return; }
+    chosen.forEach((w) => onAddToCart(p, w, map[w.w]));
+    setQtyByProduct((prev) => ({ ...prev, [p.id]: {} }));
+  };
 
   React.useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, []);
 
@@ -265,8 +281,7 @@ function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
           ) : (
             <div className="product-list">
               {visible.map((p, idx) => {
-                const selectedW = weightByProduct[p.id] || p.weights[0].w;
-                const sel = p.weights.find((w) => w.w === selectedW) || p.weights[0];
+                const packetTotal = p.weights.reduce((s, w) => s + getQty(p.id, w.w), 0);
                 const comingSoon = (p.tags || []).includes("Coming Soon") || /coming soon/i.test(p.name);
                 return (
                   <article className="p-row fade-up" key={p.id}
@@ -289,21 +304,34 @@ function ShopPage({ onNav, onAddToCart, cart, initialCategory }) {
                         <span className="coming-soon-badge">Coming Soon</span>
                       ) : (
                         <>
-                          <div className="weight-row">
-                            {p.weights.map((w) => (
-                              <button key={w.w}
-                                      className={`weight-chip${selectedW === w.w ? " is-active" : ""}`}
-                                      onClick={() => setWeightByProduct({ ...weightByProduct, [p.id]: w.w })}>
-                                {w.w}
-                              </button>
-                            ))}
+                          <div className="weight-qty-list">
+                            {p.weights.map((w) => {
+                              const q = getQty(p.id, w.w);
+                              return (
+                                <div className={`weight-qty-row${q > 0 ? " is-chosen" : ""}`} key={w.w}>
+                                  <div className="wq-info">
+                                    <span className="wq-weight">{w.w}</span>
+                                    <span className="wq-price">{fmt(w.price)}</span>
+                                    {w.mrp > w.price && <span className="price-strike">{fmt(w.mrp)}</span>}
+                                  </div>
+                                  <div className="wq-stepper" role="group" aria-label={`${w.w} packets`}>
+                                    <button type="button" onClick={() => setQty(p.id, w.w, q - 1)}
+                                            disabled={q <= 0} aria-label={`Remove a ${w.w} packet`}>
+                                      <Icon name="minus" size={13}/>
+                                    </button>
+                                    <span className="wq-count" aria-live="polite">{q}</span>
+                                    <button type="button" onClick={() => setQty(p.id, w.w, q + 1)}
+                                            aria-label={`Add a ${w.w} packet`}>
+                                      <Icon name="plus" size={13}/>
+                                    </button>
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
-                          <div className="price-row">
-                            <span className="price">{fmt(sel.price)}</span>
-                            {sel.mrp > sel.price && <span className="price-strike">{fmt(sel.mrp)}</span>}
-                          </div>
-                          <button className="btn btn--primary btn--sm" onClick={() => onAddToCart(p, sel)}>
-                            <Icon name="cart" size={14}/> Add to Cart
+                          <button className="btn btn--primary btn--sm" onClick={() => addPackets(p)}>
+                            <Icon name="cart" size={14}/>
+                            {packetTotal > 0 ? ` Add ${packetTotal} ${packetTotal === 1 ? "Packet" : "Packets"}` : " Add to Cart"}
                           </button>
                         </>
                       )}
