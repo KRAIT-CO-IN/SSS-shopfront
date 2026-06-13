@@ -34,6 +34,15 @@ const stdVariants = [
   { w: "1kg",  price: 0, disc: null, stock: 100, status: "Published" },
 ];
 
+// Owner-supplied prices (2026-06-13). INTERIM: one price per product applied
+// flat across all weights — the per-weight (250g/500g/1kg) split is still TBD.
+// Once the weight basis is confirmed, scale 250g/500g down from the 1kg figure.
+const flat = (p) => [
+  { w: "250g", price: p, disc: null, stock: 100, status: "Published" },
+  { w: "500g", price: p, disc: null, stock: 100, status: "Published" },
+  { w: "1kg",  price: p, disc: null, stock: 100, status: "Published" },
+];
+
 const products = [
   // Sweets
   {
@@ -41,40 +50,40 @@ const products = [
     shortDesc: "Available only on Saturday & Sunday",
     fullDesc: "Melt-in-the-mouth Mysorepak made fresh in pure ghee. Available only on Saturday & Sunday — order early.",
     img: IMG.mysore,
-    price: 0, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
+    price: 800, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
     status: "Published", visible: true,
     tags: ["Saturday & Sunday Only", "Pure Ghee", "Hand-made"],
-    variants: stdVariants,
+    variants: flat(800),
   },
   {
     pid: "PRD-SWE-002", name: "Boondi Laddu", catSlug: "sweets",
     shortDesc: "Available only on Saturday & Sunday",
     fullDesc: "Classic boondi laddu, soft and aromatic — prepared fresh every Saturday & Sunday.",
     img: IMG.boondiLaddu,
-    price: 0, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
+    price: 600, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
     status: "Published", visible: true,
     tags: ["Saturday & Sunday Only", "Festive Favorite"],
-    variants: stdVariants,
+    variants: flat(600),
   },
   {
     pid: "PRD-SWE-003", name: "Jeedipappu Pakam (Cashew Sweet)", catSlug: "sweets",
     shortDesc: "Premium cashews glazed in sugar syrup",
     fullDesc: "Whole jeedipappu (cashews) coated in a delicate jaggery / sugar syrup — a traditional Andhra delicacy.",
     img: IMG.cashewBrittle,
-    price: 0, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
+    price: 800, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
     status: "Published", visible: true,
     tags: ["Premium Cashew", "No Preservatives"],
-    variants: stdVariants,
+    variants: flat(800),
   },
   {
     pid: "PRD-SWE-004", name: "Pootha Rekulu", catSlug: "sweets",
     shortDesc: "Paper-thin Atreyapuram delicacy",
     fullDesc: "Wafer-thin rice sheets layered with pure ghee, sugar and dry-fruit filling.",
     img: IMG.pootha,
-    price: 0, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
+    price: 400, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
     status: "Published", visible: true,
     tags: ["Hand-made", "No Preservatives"],
-    variants: stdVariants,
+    variants: flat(400),
   },
 
   // Spices / Dry fruits & ghee section (as per xlsx grouping)
@@ -83,30 +92,30 @@ const products = [
     shortDesc: "Export-grade whole jumbo cashews",
     fullDesc: "Premium export-quality jumbo cashews — large, uniform, crunchy. Perfect for gifting and daily snacking.",
     img: IMG.cashewJumbo,
-    price: 0, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
+    price: 1100, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
     status: "Published", visible: true,
     tags: ["Export Quality", "Premium"],
-    variants: stdVariants,
+    variants: flat(1100),
   },
   {
     pid: "PRD-SPI-002", name: "Split Cashew (Export Quality)", catSlug: "spices",
     shortDesc: "Export-quality split cashews",
     fullDesc: "Hand-sorted split cashews — ideal for sweets, curries and baking.",
     img: IMG.cashewSplit,
-    price: 0, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
+    price: 1000, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
     status: "Published", visible: true,
     tags: ["Export Quality", "Versatile"],
-    variants: stdVariants,
+    variants: flat(1000),
   },
   {
     pid: "PRD-SPI-003", name: "Pure Buffalo Ghee (Home Made)", catSlug: "spices",
     shortDesc: "Home-made pure buffalo ghee",
     fullDesc: "Slow-churned buffalo ghee made the traditional bilona way. Rich aroma, golden colour.",
     img: IMG.ghee,
-    price: 0, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
+    price: 800, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
     status: "Published", visible: true,
     tags: ["Home Made", "Bilona", "Pure"],
-    variants: stdVariants,
+    variants: flat(800),
   },
 
   // Savouries
@@ -127,10 +136,10 @@ const products = [
     shortDesc: "Smoky Andhra black podi for idli & dosa",
     fullDesc: "Slow-roasted urad dal, dry chilies and curry leaves — stone-ground to a coarse, fragrant podi.",
     img: IMG.karaPodi,
-    price: 0, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
+    price: 500, disc: null, discountLabel: "", stock: 300, lowAlert: 20,
     status: "Published", visible: true,
     tags: ["Home Made", "No Preservatives", "Vegan"],
-    variants: stdVariants,
+    variants: flat(500),
   },
 
   // Fruits
