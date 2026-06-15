@@ -59,6 +59,15 @@ async function computeTotals(app, subtotal) {
 }
 
 export default async function paymentRoutes(app) {
+  // Keep the raw body (scoped to /api/payments/*) so the webhook can verify the
+  // X-Razorpay-Signature, which is computed over the exact bytes Razorpay sent.
+  app.addContentTypeParser("application/json", { parseAs: "buffer" }, (req, body, done) => {
+    req.rawBody = body;
+    if (!body || body.length === 0) return done(null, {});
+    try { done(null, JSON.parse(body.toString("utf8"))); }
+    catch (e) { e.statusCode = 400; done(e, undefined); }
+  });
+
   // Public — lets the storefront know the key_id + whether the gateway is live.
   app.get("/config", async () => ({
     keyId: RZP_KEY_ID,
@@ -178,5 +187,59 @@ export default async function paymentRoutes(app) {
       include: { items: true },
     });
     return { order: fresh };
+  });
+
+  // Server-to-server confirmation from Razorpay (configure URL+secret+events in
+  // the Razorpay dashboard). Verifies HMAC over the raw body, then reconciles the
+  // order. Idempotent + independent of the browser, so it's the source of truth
+  // even if the user closes the tab after paying.
+  app.post("/webhook", async (req, reply) => {
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET || "";
+    if (!secret) return reply.code(503).send({ error: "Webhook secret not configured" });
+
+    const sig = String(req.headers["x-razorpay-signature"] || "");
+    const raw = req.rawBody || Buffer.from(JSON.stringify(req.body || {}));
+    const expected = crypto.createHmac("sha256", secret).update(raw).digest("hex");
+    const sigOk =
+      sig.length === expected.length &&
+      crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(sig));
+    if (!sigOk) return reply.code(400).send({ error: "Invalid webhook signature" });
+
+    const event = req.body?.event;
+    const payment = req.body?.payload?.payment?.entity;
+    const rzpOrderId = payment?.order_id;
+
+    if (rzpOrderId && (event === "payment.captured" || event === "payment.authorized")) {
+      const order = await app.prisma.order.findUnique({
+        where: { razorpayOrderId: rzpOrderId },
+        include: { items: true },
+      });
+      if (order && order.status !== "Completed") {
+        await app.prisma.order.update({
+          where: { id: order.id },
+          data: { status: "Completed", razorpayPaymentId: payment.id },
+        });
+        for (const it of order.items) {
+          if (it.productId) {
+            await app.prisma.product
+              .update({ where: { id: it.productId }, data: { stock: { decrement: it.qty } } })
+              .catch(() => {});
+          }
+        }
+        req.log.info({ orderId: order.orderId, event }, "webhook → order completed");
+      }
+    } else if (rzpOrderId && event === "payment.failed") {
+      const order = await app.prisma.order.findUnique({ where: { razorpayOrderId: rzpOrderId } });
+      if (order && order.status === "Pending") {
+        await app.prisma.order.update({
+          where: { id: order.id },
+          data: { status: "Failed", razorpayPaymentId: payment?.id || null },
+        });
+        req.log.info({ orderId: order.orderId }, "webhook → order failed");
+      }
+    }
+
+    // Always ack with 200 so Razorpay does not retry a handled event.
+    return { ok: true };
   });
 }
