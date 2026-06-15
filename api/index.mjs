@@ -10,6 +10,7 @@ import productRoutes from "../server/src/routes/products.mjs";
 import categoryRoutes from "../server/src/routes/categories.mjs";
 import orderRoutes from "../server/src/routes/orders.mjs";
 import settingsRoutes from "../server/src/routes/settings.mjs";
+import paymentRoutes from "../server/src/routes/payments.mjs";
 
 let appPromise;
 
@@ -36,6 +37,7 @@ async function buildApp() {
   await app.register(categoryRoutes, { prefix: "/api/categories" });
   await app.register(orderRoutes,    { prefix: "/api/orders" });
   await app.register(settingsRoutes, { prefix: "/api/settings" });
+  await app.register(paymentRoutes,  { prefix: "/api/payments" });
 
   await app.ready();
   return app;

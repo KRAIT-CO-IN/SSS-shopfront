@@ -19,8 +19,6 @@ function App() {
   const shipping = useShippingSettings();
   const [route, setRoute] = React.useState(parseRoute());
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const [payOpen, setPayOpen] = React.useState(false);
-  const [pendingForm, setPendingForm] = React.useState(null);
   const [lastOrder, setLastOrder] = React.useState(() => {
     try { return JSON.parse(sessionStorage.getItem("sss-last-order") || "null"); } catch (e) { return null; }
   });
@@ -46,53 +44,74 @@ function App() {
     setDrawerOpen(true);
   };
 
-  const proceedToPayment = (form) => {
-    setPendingForm(form);
-    setPayOpen(true);
+  // Order placement on successful, server-verified payment.
+  const placeOrder = (form, order) => {
+    const rec = {
+      id: order.orderId, txnId: order.txId,
+      form, items: cart.items,
+      subtotal: order.subtotal, shipping: order.shipping, gst: order.gst, total: order.total,
+      placedAt: order.createdAt,
+    };
+    sessionStorage.setItem("sss-last-order", JSON.stringify(rec));
+    setLastOrder(rec);
+    cart.clear();
+    nav("confirm");
+    toasts.push("Payment successful. Order placed.");
   };
 
-  const onPaid = async () => {
-    try {
-      const { order } = await window.API.orders.create({
-        customerName: pendingForm.name,
-        customerPhone: pendingForm.phone,
-        customerEmail: pendingForm.email,
-        address: pendingForm.address,
-        city: pendingForm.city,
-        state: pendingForm.state,
-        pincode: pendingForm.pincode,
-        payment: pendingForm.payment || "UPI",
-        items: cart.items.map((i) => ({
-          name: i.name + (i.weight ? ` (${i.weight})` : ""),
-          variant: i.weight, qty: i.qty, price: i.price, productId: i.productId,
-        })),
-      });
-      const rec = {
-        id: order.orderId, txnId: order.txId,
-        form: pendingForm, items: cart.items,
-        subtotal: order.subtotal, shipping: order.shipping, gst: order.gst, total: order.total,
-        placedAt: order.createdAt,
-      };
-      sessionStorage.setItem("sss-last-order", JSON.stringify(rec));
-      setLastOrder(rec);
-      cart.clear();
-      setPayOpen(false);
-      setPendingForm(null);
-      nav("confirm");
-      toasts.push("Payment successful. Order placed.");
-    } catch (e) {
-      toasts.push("Order failed: " + e.message);
-      setPayOpen(false);
+  // Real Razorpay flow: create a server-priced order, open Razorpay Checkout,
+  // then verify the signature server-side before confirming.
+  const proceedToPayment = async (form) => {
+    if (!window.Razorpay) {
+      toasts.push("Payment library failed to load. Please refresh and try again.");
+      return;
     }
+    const items = cart.items.map((i) => ({
+      name: i.name + (i.weight ? ` (${i.weight})` : ""),
+      variant: i.weight, qty: i.qty, price: i.price, productId: i.productId,
+    }));
+
+    let init;
+    try {
+      init = await window.API.payments.order({
+        customerName: form.name, customerPhone: form.phone, customerEmail: form.email,
+        address: form.address, city: form.city, state: form.state, pincode: form.pincode,
+        items,
+      });
+    } catch (e) {
+      toasts.push("Could not start payment: " + e.message);
+      return;
+    }
+
+    const rzp = new window.Razorpay({
+      key: init.keyId,
+      amount: init.amount,
+      currency: init.currency,
+      order_id: init.rzpOrderId,
+      name: "SSS Food World",
+      description: "Order " + init.orderId,
+      prefill: { name: form.name, email: form.email, contact: form.phone },
+      notes: { orderId: init.orderId },
+      theme: { color: "#C4121F" },
+      handler: async (resp) => {
+        try {
+          const { order } = await window.API.payments.verify({
+            razorpay_order_id: resp.razorpay_order_id,
+            razorpay_payment_id: resp.razorpay_payment_id,
+            razorpay_signature: resp.razorpay_signature,
+          });
+          placeOrder(form, order);
+        } catch (e) {
+          toasts.push("Payment captured but verification failed: " + e.message + ". Contact support with order " + init.orderId + ".");
+        }
+      },
+      modal: { ondismiss: () => toasts.push("Payment cancelled. Your cart is saved.") },
+    });
+    rzp.on("payment.failed", (r) => toasts.push("Payment failed: " + (r?.error?.description || "please try again")));
+    rzp.open();
   };
 
   React.useEffect(() => { document.body.dataset.route = route.name; }, [route]);
-
-  const subtotal = cart.subtotal;
-  const FREE_AT = +shipping.free || 499;
-  const RATE = +shipping.rate || 80;
-  const shippingFee = subtotal >= FREE_AT ? 0 : RATE;
-  const gst = Math.round(subtotal * 0.05);
 
   return (
     <React.Fragment>
@@ -109,8 +128,6 @@ function App() {
       <Footer onNav={nav} />
 
       <CartDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} cart={cart} onNav={nav} />
-      <PaymentModal open={payOpen} total={pendingForm ? subtotal + shippingFee + gst : 0}
-                    onClose={() => setPayOpen(false)} onPaid={onPaid} />
       <Toasts toasts={toasts.toasts} />
     </React.Fragment>
   );

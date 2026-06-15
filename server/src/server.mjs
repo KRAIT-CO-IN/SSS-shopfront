@@ -12,6 +12,7 @@ import productRoutes from "./routes/products.mjs";
 import categoryRoutes from "./routes/categories.mjs";
 import orderRoutes from "./routes/orders.mjs";
 import settingsRoutes from "./routes/settings.mjs";
+import paymentRoutes from "./routes/payments.mjs";
 
 const app = Fastify({
   logger: { level: process.env.LOG_LEVEL || "info" },
@@ -62,6 +63,7 @@ await app.register(productRoutes,  { prefix: "/api/products" });
 await app.register(categoryRoutes, { prefix: "/api/categories" });
 await app.register(orderRoutes,    { prefix: "/api/orders" });
 await app.register(settingsRoutes, { prefix: "/api/settings" });
+await app.register(paymentRoutes,  { prefix: "/api/payments" });
 
 app.setErrorHandler((err, req, reply) => {
   req.log.error(err);

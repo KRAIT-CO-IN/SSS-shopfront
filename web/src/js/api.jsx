@@ -54,6 +54,11 @@ const API = {
     update: (cid, data) => req(`/categories/${cid}`, { method: "PUT", body: data }),
     remove: (cid) => req(`/categories/${cid}`, { method: "DELETE" }),
   },
+  payments: {
+    config: () => req("/payments/config"),
+    order: (data) => req("/payments/order", { method: "POST", body: data }),
+    verify: (data) => req("/payments/verify", { method: "POST", body: data }),
+  },
   orders: {
     create: (data) => req("/orders", { method: "POST", body: data }),
     list: (params = {}) => {

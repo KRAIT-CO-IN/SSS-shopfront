@@ -12,6 +12,10 @@ export default async function orderRoutes(app) {
   // Storefront — create order (public)
   app.post("/", async (req, reply) => {
     const b = req.body || {};
+    // Online payments must go through /api/payments (Razorpay-verified). This
+    // public endpoint only accepts Cash on Delivery so it can't mint paid orders.
+    if (String(b.payment || "").toUpperCase() !== "COD")
+      return reply.code(403).send({ error: "Online payments must use the payment gateway" });
     if (!b.items?.length) return reply.code(400).send({ error: "No items" });
     if (!b.customerName || !b.customerPhone) return reply.code(400).send({ error: "Customer details required" });
 
@@ -32,8 +36,8 @@ export default async function orderRoutes(app) {
         state: b.state || "",
         pincode: b.pincode || "",
         subtotal, shipping, gst, total,
-        payment: b.payment || "UPI",
-        status: "Completed",
+        payment: "COD",
+        status: "Pending",
         items: {
           create: b.items.map((i) => ({
             name: i.name,

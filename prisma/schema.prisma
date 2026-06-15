@@ -74,11 +74,13 @@ model Order {
   subtotal       Int
   shipping       Int         @default(0)
   gst            Int         @default(0)
-  total          Int
-  payment        String
-  status         String      @default("Completed")
-  createdAt      DateTime    @default(now())
-  items          OrderItem[]
+  total             Int
+  payment           String
+  status            String      @default("Completed")
+  razorpayOrderId   String?     @unique
+  razorpayPaymentId String?
+  createdAt         DateTime    @default(now())
+  items             OrderItem[]
 
   @@index([status])
   @@index([createdAt])
