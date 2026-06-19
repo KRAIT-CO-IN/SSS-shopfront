@@ -235,6 +235,7 @@ function Field({ label, required, error, children }) {
 // ─────────────────────────────────────────────
 function ConfirmPage({ order, onNav }) {
   React.useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, []);
+  const FREE_AT = (typeof SHIPPING !== "undefined" && +SHIPPING.free) || 499;
 
   if (!order) {
     return (
@@ -258,6 +259,14 @@ function ConfirmPage({ order, onNav }) {
           Thank you for your purchase, {order.form.name.split(" ")[0]}. We're preparing your artisanal goods for shipment.
         </p>
 
+        {order.total != null && (
+          <div className="confirm-paid">
+            <span className="tag tag--success">✓ Payment Successful</span>
+            <div className="confirm-amount">{fmt(order.total)}</div>
+            <div className="confirm-amount-label">Amount Paid</div>
+          </div>
+        )}
+
         <div className="confirm-details">
           <div>
             <h4>Customer Details</h4>
@@ -265,14 +274,22 @@ function ConfirmPage({ order, onNav }) {
               <div className="label">Name</div>
               <div className="value">{order.form.name}</div>
             </div>
-            <div className="row">
-              <div className="label">Email</div>
-              <div className="value">{order.form.email}</div>
-            </div>
+            {order.form.email && (
+              <div className="row">
+                <div className="label">Email</div>
+                <div className="value">{order.form.email}</div>
+              </div>
+            )}
             <div className="row">
               <div className="label">Mobile</div>
               <div className="value">{order.form.phone}</div>
             </div>
+            {order.form.address && (
+              <div className="row">
+                <div className="label">Deliver To</div>
+                <div className="value">{[order.form.address, order.form.city, order.form.state, order.form.pincode].filter(Boolean).join(", ")}</div>
+              </div>
+            )}
           </div>
           <div>
             <h4>Order Details</h4>
@@ -284,12 +301,38 @@ function ConfirmPage({ order, onNav }) {
               <div className="label">Transaction ID</div>
               <div className="value mono">{order.txnId}</div>
             </div>
+            {order.paymentId && (
+              <div className="row">
+                <div className="label">Payment ID</div>
+                <div className="value mono">{order.paymentId}</div>
+              </div>
+            )}
             <div className="row">
               <div className="label">Status</div>
-              <div className="value"><span className="tag tag--success">Hand-packed</span></div>
+              <div className="value"><span className="tag tag--success">Paid</span></div>
             </div>
           </div>
         </div>
+
+        {order.items?.length > 0 && (
+          <div className="confirm-items">
+            <h4>Items</h4>
+            {order.items.map((it, i) => (
+              <div className="row" key={i}>
+                <div className="label">{it.name}{it.variant ? ` · ${it.variant}` : ""} × {it.qty}</div>
+                <div className="value mono">{fmt((it.total != null ? it.total : it.price * it.qty))}</div>
+              </div>
+            ))}
+            {order.subtotal != null && (
+              <React.Fragment>
+                <div className="row"><div className="label">Subtotal</div><div className="value mono">{fmt(order.subtotal)}</div></div>
+                <div className="row"><div className="label">Shipping</div><div className="value mono">{order.shipping ? fmt(order.shipping) : "Free"}</div></div>
+                <div className="row"><div className="label">GST (5%)</div><div className="value mono">{fmt(order.gst)}</div></div>
+                <div className="row confirm-total"><div className="label">Total Paid</div><div className="value mono">{fmt(order.total)}</div></div>
+              </React.Fragment>
+            )}
+          </div>
+        )}
 
         <button className="btn btn--primary" onClick={() => onNav("shop")}>
           Continue Shopping

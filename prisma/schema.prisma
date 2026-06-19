@@ -44,6 +44,7 @@ model Product {
   price         Int
   disc          Int?
   discountLabel String?
+  baseWeight    String?   @default("100g")
   stock         Int       @default(0)
   lowAlert      Int       @default(10)
   status        String    @default("Published")

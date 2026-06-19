@@ -44,13 +44,20 @@ function App() {
     setDrawerOpen(true);
   };
 
-  // Order placement on successful, server-verified payment.
-  const placeOrder = (form, order) => {
+  // Order placement on successful, server-verified payment. Built entirely from the
+  // server order so it survives even if the cart/form closures are gone (page reload).
+  const finalizeOrder = (o) => {
     const rec = {
-      id: order.orderId, txnId: order.txId,
-      form, items: cart.items,
-      subtotal: order.subtotal, shipping: order.shipping, gst: order.gst, total: order.total,
-      placedAt: order.createdAt,
+      id: o.orderId, txnId: o.txId,
+      paymentId: o.razorpayPaymentId || null,
+      status: o.status || "Completed",
+      form: {
+        name: o.customerName || "", email: o.customerEmail || "", phone: o.customerPhone || "",
+        address: o.address || "", city: o.city || "", state: o.state || "", pincode: o.pincode || "",
+      },
+      items: o.items || [],
+      subtotal: o.subtotal, shipping: o.shipping, gst: o.gst, total: o.total,
+      placedAt: o.createdAt,
     };
     sessionStorage.setItem("sss-last-order", JSON.stringify(rec));
     setLastOrder(rec);
@@ -100,7 +107,7 @@ function App() {
             razorpay_payment_id: resp.razorpay_payment_id,
             razorpay_signature: resp.razorpay_signature,
           });
-          placeOrder(form, order);
+          finalizeOrder(order);
         } catch (e) {
           toasts.push("Payment captured but verification failed: " + e.message + ". Contact support with order " + init.orderId + ".");
         }

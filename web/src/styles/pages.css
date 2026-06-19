@@ -1201,6 +1201,31 @@
 .confirm-details .label { font-size: 12px; color: var(--c-muted); margin-bottom: 2px; }
 .confirm-details .value { font-size: 14px; color: var(--c-ink-2); font-weight: 500; }
 .confirm-details .value.mono { font-family: var(--font-mono); letter-spacing: 0.4px; }
+
+.confirm-paid { text-align: center; margin: 4px 0 4px; }
+.confirm-amount { font-size: 34px; font-weight: 700; color: var(--c-ink-2); margin-top: 10px; line-height: 1; }
+.confirm-amount-label { font-size: 12px; color: var(--c-muted); margin-top: 4px; letter-spacing: 0.4px; }
+
+.confirm-items {
+  width: 100%;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  padding: 24px 28px;
+  text-align: left;
+}
+.confirm-items h4 {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 1.6px;
+  text-transform: uppercase; color: var(--c-muted); margin: 0 0 12px; font-weight: 500;
+}
+.confirm-items .row { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
+.confirm-items .label { font-size: 14px; color: var(--c-ink-2); }
+.confirm-items .value { font-size: 14px; color: var(--c-ink-2); font-weight: 500; }
+.confirm-items .value.mono { font-family: var(--font-mono); }
+.confirm-items .confirm-total {
+  border-top: 1px solid var(--c-line); margin-top: 12px; padding-top: 12px; font-weight: 700;
+}
+.confirm-items .confirm-total .label, .confirm-items .confirm-total .value { font-weight: 700; }
 .shop-cta-card {
   background: linear-gradient(180deg, rgba(196,18,31,0.06), rgba(196,18,31,0)), var(--c-surface);
   border: 1px solid var(--c-line);
