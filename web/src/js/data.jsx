@@ -189,6 +189,7 @@ function Icon({ name, size = 18, stroke = 1.7, ...props }) {
     case "star":      return <svg {...common} fill="currentColor"><path d="M12 2l3.1 6.5L22 9.7l-5 4.7 1.2 6.8L12 17.8 5.8 21.2 7 14.4 2 9.7l6.9-1.2z"/></svg>;
     case "star-o":    return <svg {...common}><path d="M12 2l3.1 6.5L22 9.7l-5 4.7 1.2 6.8L12 17.8 5.8 21.2 7 14.4 2 9.7l6.9-1.2z"/></svg>;
     case "check":     return <svg {...common}><path d="M4 12l5 5L20 6"/></svg>;
+    case "printer":   return <svg {...common}><path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8"/><path d="M6 18H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h18a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-3"/></svg>;
     case "lock":      return <svg {...common}><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>;
     case "bolt":      return <svg {...common}><path d="M13 2L4 14h7l-1 8 9-12h-7z" fill="currentColor"/></svg>;
     case "instagram": return <svg {...common}><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>;

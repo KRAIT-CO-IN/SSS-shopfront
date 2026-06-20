@@ -67,9 +67,7 @@ function CheckoutPage({ cart, onNav, onProceed }) {
   const FREE_AT = +shipping.free || 499;
   const RATE = +shipping.rate || 80;
   const SHIPPING = cart.subtotal >= FREE_AT ? 0 : RATE;
-  const TAX_RATE = 0.05;
-  const tax = Math.round(cart.subtotal * TAX_RATE);
-  const total = cart.subtotal + SHIPPING + tax;
+  const total = cart.subtotal + SHIPPING;
 
   return (
     <main className="container" data-screen-label="05 Checkout">
@@ -196,7 +194,6 @@ function CheckoutPage({ cart, onNav, onProceed }) {
             <div className="sum-totals">
               <div className="sum-row"><span>Subtotal</span><span>{fmt(cart.subtotal)}</span></div>
               <div className="sum-row"><span>Shipping <span style={{ color: "var(--c-muted)", fontSize: 12 }}>(Standard Express)</span></span><span>{fmt(SHIPPING)}</span></div>
-              <div className="sum-row"><span>Taxes</span><span>{fmt(tax)}</span></div>
               <div className="sum-row total"><span>Total</span><b>{fmt(total)}</b></div>
             </div>
 
@@ -235,7 +232,6 @@ function Field({ label, required, error, children }) {
 // ─────────────────────────────────────────────
 function ConfirmPage({ order, onNav }) {
   React.useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, []);
-  const FREE_AT = (typeof SHIPPING !== "undefined" && +SHIPPING.free) || 499;
 
   if (!order) {
     return (
@@ -327,36 +323,85 @@ function ConfirmPage({ order, onNav }) {
               <React.Fragment>
                 <div className="row"><div className="label">Subtotal</div><div className="value mono">{fmt(order.subtotal)}</div></div>
                 <div className="row"><div className="label">Shipping</div><div className="value mono">{order.shipping ? fmt(order.shipping) : "Free"}</div></div>
-                <div className="row"><div className="label">GST (5%)</div><div className="value mono">{fmt(order.gst)}</div></div>
                 <div className="row confirm-total"><div className="label">Total Paid</div><div className="value mono">{fmt(order.total)}</div></div>
               </React.Fragment>
             )}
           </div>
         )}
 
-        <button className="btn btn--primary" onClick={() => onNav("shop")}>
-          Continue Shopping
-        </button>
+        <div className="confirm-actions">
+          <button className="btn btn--ghost" onClick={() => window.print()}>
+            <Icon name="printer" size={16}/> Print / Save Invoice
+          </button>
+          <button className="btn btn--primary" onClick={() => onNav("shop")}>
+            Continue Shopping
+          </button>
+        </div>
       </section>
 
-      <aside className="shop-cta-card">
-        <span className="label-xs">Up Next</span>
-        <h2 className="h-2">Stock up the pantry</h2>
-        <p className="body" style={{ maxWidth: 38 + "ch" }}>
-          Free shipping on all orders above {fmt(FREE_AT)}. Save 10% on your next gift box when you bundle three or more.
-        </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, margin: "16px 0" }}>
-          {PRODUCTS.slice(0, 4).map((p) => (
-            <button key={p.id}
-                    onClick={() => onNav("product", p.id)}
-                    style={{ background: "none", border: "1px solid var(--c-line)", borderRadius: 10, overflow: "hidden", padding: 0, cursor: "pointer" }}
-                    aria-label={p.name}>
-              <img src={p.img} alt={p.name} style={{ width: "100%", aspectRatio: "1/1", objectFit: "cover" }} />
-            </button>
-          ))}
+      {/* Print-only invoice document — hidden on screen, laid out for A4 PDF */}
+      <div className="invoice-sheet" aria-hidden="true">
+        <header className="inv-head">
+          <img className="inv-logo" src="/assets/sss-logo-final.png" alt="SSS Food World" />
+          <div className="inv-company">
+            <div className="inv-company-name">SSS Food World</div>
+            <div>Shop No. 3, Balaji Sadan, Opp. Municipal Park,</div>
+            <div>Nizampet Vill., Medchal-Malkajgiri, Hyderabad - 500049</div>
+            <div>FSSAI Lic. No. 23626029001407</div>
+            <div>+91 76758 08874 &nbsp;·&nbsp; +91 70937 04033</div>
+          </div>
+        </header>
+
+        <div className="inv-confirmed">✓ Order Confirmed</div>
+
+        <div className="inv-grid">
+          <div className="inv-block">
+            <div className="inv-block-title">Billed &amp; Shipped To</div>
+            <div className="inv-name">{order.form.name}</div>
+            {order.form.address && (
+              <div>{[order.form.address, order.form.city, order.form.state, order.form.pincode].filter(Boolean).join(", ")}</div>
+            )}
+            <div>{order.form.phone}</div>
+            {order.form.email && <div>{order.form.email}</div>}
+          </div>
+          <div className="inv-block inv-block--right">
+            <div className="inv-kv"><span>Invoice / Order</span><b>{order.id}</b></div>
+            {order.txnId && <div className="inv-kv"><span>Transaction</span><b>{order.txnId}</b></div>}
+            {order.paymentId && <div className="inv-kv"><span>Payment ID</span><b>{order.paymentId}</b></div>}
+            <div className="inv-kv"><span>Status</span><b className="inv-paid">PAID</b></div>
+          </div>
         </div>
-        <button className="btn btn--ghost" onClick={() => onNav("shop")}>Browse the full shop</button>
-      </aside>
+
+        <table className="inv-table">
+          <thead>
+            <tr>
+              <th className="inv-c-item">Item</th>
+              <th className="inv-c-qty">Qty</th>
+              <th className="inv-c-amt">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(order.items || []).map((it, i) => (
+              <tr key={i}>
+                <td className="inv-c-item">{it.name}{it.variant ? ` · ${it.variant}` : ""}</td>
+                <td className="inv-c-qty">{it.qty}</td>
+                <td className="inv-c-amt">{fmt(it.total != null ? it.total : it.price * it.qty)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="inv-summary">
+          {order.subtotal != null && <div className="inv-srow"><span>Subtotal</span><span>{fmt(order.subtotal)}</span></div>}
+          {order.subtotal != null && <div className="inv-srow"><span>Shipping</span><span>{order.shipping ? fmt(order.shipping) : "Free"}</span></div>}
+          <div className="inv-srow inv-total"><span>Total Paid</span><span>{fmt(order.total)}</span></div>
+        </div>
+
+        <footer className="inv-foot">
+          <div>Thank you for your order!</div>
+          <div className="inv-tagline">Taste…Lasts Forever!!</div>
+        </footer>
+      </div>
     </main>
   );
 }

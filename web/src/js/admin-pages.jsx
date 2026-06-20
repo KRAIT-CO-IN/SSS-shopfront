@@ -5,7 +5,7 @@
 // Login
 // ─────────────────────────────────────────────
 function LoginPage({ onLogin }) {
-  const [email, setEmail] = React.useState("admin@artisangroc.com");
+  const [email, setEmail] = React.useState("");
   const [pw, setPw] = React.useState("");
   const [show, setShow] = React.useState(false);
   const [busy, setBusy] = React.useState(false);
@@ -54,7 +54,7 @@ function LoginPage({ onLogin }) {
         <div className="secure">
           <AIcon name="lock" size={12} /> Secure Admin Access
         </div>
-        <div className="adm-login-foot">© 2025 ArtisanGroc. Internal Use Only.</div>
+        <div className="adm-login-foot">© 2026 SSS Food World. Internal Use Only.</div>
       </form>
     </div>
   );
@@ -837,11 +837,8 @@ function TransactionModal({ txn, onClose }) {
               <div className="aprice-row" style={{ padding: "6px 0", borderBottom: "none" }}>
                 <span className="text-muted">Subtotal</span><span>{afmt(txn.subtotal)}</span>
               </div>
-              <div className="aprice-row" style={{ padding: "6px 0", borderBottom: "none" }}>
-                <span className="text-muted">Shipping</span><span>{afmt(txn.shipping)}</span>
-              </div>
               <div className="aprice-row" style={{ padding: "6px 0", borderBottom: "1px solid var(--ac-line)" }}>
-                <span className="text-muted">GST (5%)</span><span>{afmt(txn.gst)}</span>
+                <span className="text-muted">Shipping</span><span>{afmt(txn.shipping)}</span>
               </div>
               <div className="aprice-row" style={{ padding: "10px 0", fontSize: 16 }}>
                 <b>Total</b><b className="text-red">{afmt(txn.total)}</b>

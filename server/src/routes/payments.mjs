@@ -54,8 +54,8 @@ async function computeTotals(app, subtotal) {
   const free = +ship.free || 499;
   const rate = +ship.rate || 80;
   const shipping = subtotal >= free ? 0 : rate;
-  const gst = Math.round(subtotal * 0.05);
-  return { subtotal, shipping, gst, total: subtotal + shipping + gst };
+  const gst = 0;
+  return { subtotal, shipping, gst, total: subtotal + shipping };
 }
 
 export default async function paymentRoutes(app) {

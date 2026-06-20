@@ -1148,33 +1148,32 @@
    Order confirmation
    ────────────────────────────────────────────── */
 .confirm-wrap {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 80px;
-  padding: 64px 0 80px;
-  align-items: start;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 28px 0 48px;
 }
 .confirm-card {
   text-align: center;
   display: flex; flex-direction: column;
-  align-items: center; gap: 24px;
+  align-items: center; gap: 14px;
 }
 .confirm-tick {
-  width: 88px; height: 88px;
-  border-radius: 20px;
+  width: 60px; height: 60px;
+  border-radius: 16px;
   background: var(--c-primary-soft);
   display: inline-flex; align-items: center; justify-content: center;
   color: var(--c-primary);
   animation: checkPop .5s cubic-bezier(.2,.9,.2,1.2) .1s both;
 }
+.confirm-tick svg { width: 30px; height: 30px; }
 .confirm-title {
   font-family: var(--font-serif);
-  font-size: clamp(36px, 4vw, 56px);
+  font-size: clamp(26px, 3vw, 36px);
   font-weight: 600;
   color: var(--c-ink-2);
   margin: 0;
-  line-height: 1.05;
-  max-width: 14ch;
+  line-height: 1.08;
+  max-width: 16ch;
 }
 .confirm-desc { color: var(--c-muted); max-width: 36ch; margin: 0; }
 .confirm-details {
@@ -1226,6 +1225,70 @@
   border-top: 1px solid var(--c-line); margin-top: 12px; padding-top: 12px; font-weight: 700;
 }
 .confirm-items .confirm-total .label, .confirm-items .confirm-total .value { font-weight: 700; }
+.confirm-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.confirm-actions .btn { display: inline-flex; align-items: center; gap: 8px; }
+
+/* Invoice sheet is print-only */
+.invoice-sheet { display: none; }
+
+@media print {
+  @page { size: A4; margin: 14mm; }
+  /* Hide the entire app; render only the invoice */
+  body * { visibility: hidden !important; }
+  .invoice-sheet, .invoice-sheet * { visibility: visible !important; }
+  body { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .invoice-sheet {
+    display: block; position: absolute; top: 0; left: 0; right: 0;
+    color: #1a1a1a; font-size: 13px; line-height: 1.5;
+    font-family: var(--font-sans, system-ui, sans-serif);
+  }
+
+  /* Header: logo + company */
+  .inv-head { display: flex; align-items: center; gap: 18px; padding-bottom: 14px; border-bottom: 2px solid #C4121F; }
+  .inv-logo { height: 84px; width: auto; }
+  .inv-company { font-size: 11px; line-height: 1.55; color: #444; }
+  .inv-company-name { font-size: 17px; font-weight: 700; color: #1a1a1a; margin-bottom: 3px; }
+
+  /* Centered confirmed banner — green */
+  .inv-confirmed {
+    text-align: center; margin: 16px 0; font-size: 18px; font-weight: 700;
+    color: #15803d; letter-spacing: .3px;
+  }
+
+  /* Billed-to + order meta */
+  .inv-grid { display: flex; justify-content: space-between; gap: 32px; margin-bottom: 18px; }
+  .inv-block { font-size: 12px; line-height: 1.6; color: #333; }
+  .inv-block--right { text-align: right; min-width: 230px; }
+  .inv-block-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 6px; }
+  .inv-name { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 2px; }
+  .inv-kv { display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 4px; }
+  .inv-kv span { color: #888; }
+  .inv-kv b { color: #1a1a1a; font-weight: 600; }
+  .inv-paid { color: #15803d !important; }
+
+  /* Items table */
+  .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  .inv-table thead th {
+    background: #faf3ee; text-align: left; font-size: 11px; text-transform: uppercase;
+    letter-spacing: .6px; color: #555; padding: 9px 12px; border-bottom: 2px solid #e3d8cf;
+  }
+  .inv-table td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+  .inv-c-qty { text-align: center; width: 60px; }
+  .inv-c-amt { text-align: right; width: 110px; font-variant-numeric: tabular-nums; }
+  thead .inv-c-qty { text-align: center; }
+  thead .inv-c-amt { text-align: right; }
+
+  /* Totals */
+  .inv-summary { width: 280px; margin-left: auto; }
+  .inv-srow { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 13px; }
+  .inv-srow span:last-child { font-variant-numeric: tabular-nums; }
+  .inv-total { border-top: 2px solid #1a1a1a; margin-top: 4px; padding-top: 9px; font-size: 15px; font-weight: 700; }
+
+  /* Footer */
+  .inv-foot { margin-top: 28px; padding-top: 14px; border-top: 1px solid #eee; text-align: center; color: #666; font-size: 12px; }
+  .inv-tagline { color: #C4121F; font-style: italic; margin-top: 2px; }
+}
 .shop-cta-card {
   background: linear-gradient(180deg, rgba(196,18,31,0.06), rgba(196,18,31,0)), var(--c-surface);
   border: 1px solid var(--c-line);

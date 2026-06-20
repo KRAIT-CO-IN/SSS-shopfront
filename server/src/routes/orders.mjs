@@ -21,8 +21,8 @@ export default async function orderRoutes(app) {
 
     const subtotal = b.items.reduce((s, i) => s + (i.price * i.qty), 0);
     const shipping = subtotal >= 999 ? 0 : 80;
-    const gst = Math.round(subtotal * 0.05);
-    const total = subtotal + shipping + gst;
+    const gst = 0;
+    const total = subtotal + shipping;
 
     const order = await app.prisma.order.create({
       data: {
